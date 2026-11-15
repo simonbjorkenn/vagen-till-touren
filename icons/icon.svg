@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#15251B"/>
+  <!-- green -->
+  <ellipse cx="256" cy="372" rx="168" ry="52" fill="#4F8A41"/>
+  <ellipse cx="256" cy="366" rx="132" ry="36" fill="#62A052"/>
+  <!-- hole -->
+  <ellipse cx="236" cy="368" rx="17" ry="6" fill="#0E1912"/>
+  <!-- pole -->
+  <rect x="230" y="128" width="11" height="242" rx="4" fill="#F1F4EA"/>
+  <!-- flag -->
+  <path d="M241 132 L352 168 L241 204 Z" fill="#F0BC1E"/>
+  <!-- ball -->
+  <circle cx="306" cy="352" r="15" fill="#FFFFFF"/>
+  <circle cx="301" cy="347" r="2.2" fill="#C6CFBE"/>
+  <circle cx="310" cy="350" r="2.2" fill="#C6CFBE"/>
+  <circle cx="304" cy="357" r="2.2" fill="#C6CFBE"/>
+</svg>
