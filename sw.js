@@ -1,7 +1,7 @@
 // Service worker för Vägen till touren. Gör att spelet startar utan nät.
 // Sidan hämtas först från nätet (så en ny version syns direkt) och sparas;
 // utan nät används den sparade. Typsnitt sparas när de har hämtats en gång.
-const CACHE = 'vtt-af5dbb61eb';
+const CACHE = 'vtt-0eec629f33';
 const CORE = ['./', './index.html', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-180.png', './icons/icon.svg'];
 

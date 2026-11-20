@@ -286,12 +286,16 @@ button:active:not(:disabled){scale:.97}
 .val.lie{font-size:21px;line-height:1.3;text-transform:uppercase}
 .verdict{border:1.5px solid var(--line);border-left:4px solid var(--turf);border-radius:8px;padding:9px 11px;background:var(--paper);display:flex;flex-direction:column;gap:4px;font-size:14px}
 .verdict.bad{border-left-color:var(--penalty)}
+.verdict.mixed{border-left-color:var(--flag)}
+.cell.pen .val{color:var(--penalty)}
 .strip.stats .val{font-size:23px}
 .feed .muted{font-size:13px;white-space:nowrap}
 @media (max-width:380px){.val.lie{font-size:18px}.strip.stats .val{font-size:20px}.strip.stats .lab{font-size:9.5px;letter-spacing:.05em}}
 
 /* Bilden visar slaget: avståndet står i skissen, stämpeln väljer ett ledigt hörn och puttarna ritas i närbild */
 .stamp.tl{right:auto;left:10px}
+.stamp.long{font-size:30px}
+@media (max-width:380px){.stamp.long{font-size:26px}}
 .stamp.br{top:auto;bottom:10px}
 .stamp.bl{top:auto;bottom:10px;right:auto;left:10px}
 .msr{animation:fadein .35s ease-out .1s both}
@@ -535,6 +539,42 @@ button:active:not(:disabled){scale:.97}
 .cutnow{margin:0;font-size:14px;border-left:4px solid var(--flag);padding:2px 0 2px 10px}
 .cutnow.low{border-left-color:#BE3F28}
 .gear .gt small.low{color:#BE3F28;font-weight:700}
+
+/* Kassan i toppraden (2026-11-15 kväll): från 100 000 kr klipptes "kr" bort, och i 360 punkter också sista siffran. Rutan Kassa får växa när talet kräver det; annars är de fyra rutorna lika breda som förut. */
+.strip.now{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(max-content,1fr) minmax(0,1fr)}
+
+/* Säsongens mål (2026-11-16): tabellen som 31 rutor, strecken i tabellen, säsongens tävlingar och tabellraden efter tävlingen. */
+.pips31{display:flex;gap:2px;align-items:flex-end;height:22px}
+.pips31 i{flex:1;height:10px;border-radius:2px;background:var(--line)}
+.pips31 i.up{background:var(--turf)}
+.pips31 i.dn{background:#E0A093}
+.pips31 i.me{height:22px;background:var(--flag);box-shadow:inset 0 0 0 1.5px var(--ink);animation:rise .4s ease-out both}
+.pipl{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-top:-5px}
+.pipl .up{color:#2E6B28}.pipl .dn{color:var(--penalty);margin-left:auto}
+.race .strip .lab{letter-spacing:.04em;white-space:nowrap}
+.race .strip .val small{font-family:var(--font-body);font-size:11.5px;font-weight:500;color:var(--ink-soft)}
+.race .cell.hot .val small{color:var(--ink)}
+.lb tr.cutrow.up td{color:#2E6B28;border-bottom-color:#2E6B28}
+.tours{display:flex;flex-direction:column}
+.tw{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.tw:last-child{border-bottom:0;padding-bottom:0}
+.tw > span:first-child{color:var(--ink-soft);font-weight:700;font-size:12.5px}
+.tw small{display:block;color:var(--ink-soft);font-size:12.5px;font-variant-numeric:tabular-nums}
+.tw .tp{font-family:var(--font-display);font-weight:800;font-size:20px;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tw .tp.top{background:var(--flag);border-radius:4px;padding:2px 6px}
+.tw .tp.miss{color:var(--penalty);font-size:15px;letter-spacing:.06em;text-transform:uppercase}
+.tw.next b,.tw.off b{font-weight:500;color:var(--ink-soft)}
+.tw.now b{font-weight:700;color:var(--ink)}
+.reschips .mv{margin-left:4px}
+@media (prefers-reduced-motion:reduce){.pips31 i.me{animation:none}}
+@media (max-width:380px){.race .strip .lab{font-size:9.5px;letter-spacing:.02em}}
+.tblnow{margin:0;font-size:14px;border-left:4px solid var(--flag);padding:2px 0 2px 10px}
+.tblnow.low{border-left-color:#BE3F28}
+.tblnow.in{border-left-color:var(--turf)}
+
+/* Släppet efter vattnet (2026-11-18): två val under bilden, som i ett nyckelläge. */
+.droppick{margin:14px 0 6px}
+.droppick h3{margin:0 0 8px}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -558,11 +598,12 @@ button:active:not(:disabled){scale:.97}
       <li><b>Händelser.</b> De flesta veckor händer något som kräver ett val. Det påverkar pass, pengar, form eller helgens tävling. Vissa val gäller resten av säsongen och står då under Pågår på fliken Veckan. Vissa avgörs av hur du spelar i helgen, och vissa kommer tillbaka några veckor senare.</li>
       <li><b>Rivaler.</b> Tre spelare följer dig genom karriären. Spelet håller räkningen på era möten.</li>
       <li><b>Träning.</b> Varje pass är teknik eller spelträning. Teknik gör dig bättre för alltid, ungefär dubbelt så mycket som spelträning. Spelträning ger dessutom +6 på den delen i helgens tävling. Raden med tre siffror visar summan av veckans pass: hur mycket bättre du blir för alltid, din styrka i helgen mot fältets, och energin som blir kvar. Ju högre en egenskap är, desto mindre ger varje pass, och ett andra pass på samma sak samma vecka ger mindre än det första.</li>
-      <li><b>Veckans hjälp.</b> Varje vecka hjälper klubbens pro Bosse dig med en del av spelet. Träning på den ger 50 % mer just den veckan.</li>
+      <li><b>Veckans hjälp.</b> Varje vecka hjälper klubbens pro Bosse dig med en del av spelet. Träning på den ger 50 % mer just den veckan. När du når Europaserien och Världstouren första gången väljer du om Bosse ska följa med eller om du byter till tourtränaren Kim Sandell. Kim hjälper med något helgens bana kräver, och spelträning på det ger +3 i helgen i stället för 50 % mer för alltid.</li>
       <li><b>Skärpa och ringrost.</b> Det som spelträning ger i helgen kallas skärpa: +6 i helgens tävling (två pass på samma sak ger +9). Skärpan är färskvara och är borta veckan efter. Det du inte tränar alls en vecka är ringrostigt redan samma helg (−2), efter två veckor −3. Ett pass i valfritt läge tar bort ringrosten. Egenskapen i sig sjunker aldrig.</li>
       <li><b>Banor.</b> Varje bana kräver olika saker. Säsongsbanan överst visar vad som väntar. Tryck på en vecka för att se vad banan kräver.</li>
       <li><b>Energi.</b> Under 35 spelar du sämre. Under 20 ökar skaderisken snabbt. Fys ger mer energi varje vecka.</li>
       <li><b>Tävlingen.</b> Rundan spelas åt dig, men i tre lägen per runda väljer du själv. Chansen beror på dina egenskaper.</li>
+      <li><b>Vatten.</b> Hamnar bollen i vattnet blir det plikt, ett slag, och du väljer var du släpper: vid vattnet, där det är kortare kvar men ofta ett halvslag, eller bakåt på flagglinjen, där det är längre kvar men ett fullt slag. Ligger bollen i vattenkanten kan den slås som den ligger, utan plikt.</li>
       <li><b>Tur och otur.</b> På green kan en längre putt gå i och en kort putt missa, även när slaget dit gick som väntat. En bra puttare har lite oftare tur. Ute på banan kan en boll studsa ut ur träden eller stanna på kanten av vattnet, och även ett bra slag kan hamna i ett dåligt läge.</li>
       <li><b>Slag mot fältet.</b> Efter varje runda ser du hur många slag du vann eller tappade mot fältets snitt: från tee, i inspelen, i närspelet och på green. Inspel är slag från längre än 30 meter från green, också wedgar. Närspel är slag närmare än så som inte slås på green, också en putt från foregreen. Säsongens snitt står på fliken Spelaren och visar var du har mest att hämta.</li>
       <li><b>Karriären.</b> På fliken Karriären står dina rekord och milstolparna du har tagit. Tryck på ett märke för att se vad som krävs.</li>
@@ -570,7 +611,7 @@ button:active:not(:disabled){scale:.97}
       <li><b>Pengar.</b> Startavgifter, levnadskostnader, tränare, läger och utrustning kostar. Prispengar och sponsorer kommer med bra placeringar.</li>
       <li><b>Bagen.</b> På fliken Spelaren ser du dina fjorton klubbor, bollen och bagen. Varje del har fyra nivåer. En bättre nivå ger +1,5 på sin del av spelet i tävling, bollen +0,5 på närspel och putt, och bagen +2 energi i veckan. På högre nivåer har hela fältet bättre utrustning, så den som inte uppgraderar halkar efter. Siffrorna överst i rutan Bagen jämför din utrustning med fältets.</li>
       <li><b>Utseende och kläder.</b> På fliken Spelaren väljer du hur din spelare ser ut. Kläderna ändrar bara utseendet. Du får en ny outfit för varje nivå du når och en för första segern, och resten köper du.</li>
-      <li><b>Säsongen.</b> Tio veckor. Topp fem flyttas upp, och från nivå två flyttas de fem sista ner.</li>
+      <li><b>Säsongen.</b> Tio veckor. Topp fem flyttas upp, och från nivå två flyttas de fem sista ner. En seger ger 100 poäng, en andraplats 70, en tiondeplats 17 och plats 23 en poäng. Finalen ger dubbla poäng. På fliken Touren ser du hur långt du har till strecket.</li>
     </ul>
     <button class="btn" type="button" data-a="closeHelp">Tillbaka till spelet</button>
     <button class="btn alt" type="button" data-a="reset" id="resetBtn">Börja om från början</button>
@@ -751,7 +792,7 @@ const LAST = ['Lindqvist','Åkesson','Brandt','Holmgren','Sandahl','Wikström','
 function newCareer(name, bg, seed){
   const S = {v:1, name:(name||'').trim() || 'Du', bg, rng:seed|0, season:0, tier:0, week:1, st:Object.assign({}, BG[bg].st),
     energy:80, form:0, sharp:freshSharp(), money:6000, camp:false, coach:0, sponsor:0, perks:[], injury:0, phase:'plan', T:null, report:null, hist:[], final:null, log:[],
-    clock:0, wk:freshWk(), event:null, seen:{}, delayed:[], news:[], flags:{}, mods:[], bets:[], force:null, look:freshLook(seed), outfit:'klubb', wardrobe:['klubb','vit'], gear:freshGear(), album:[], agent:false, rivals:null, hot0:seed|0, rec:freshRec()};
+    clock:0, wk:freshWk(), event:null, seen:{}, delayed:[], news:[], flags:{}, mods:[], bets:[], force:null, look:freshLook(seed), outfit:'klubb', wardrobe:['klubb','vit'], gear:freshGear(), album:[], agent:false, rivals:null, hot0:seed|0, mentor:'bosse', rec:freshRec()};
   setupSeason(S); return S;
 }
 function setupSeason(S){
@@ -841,13 +882,35 @@ function hotPerm(S, b){
   const p = SK.slice(); for (let i=p.length-1; i>0; i--){ const j = Math.floor(r()*(i+1)), x = p[i]; p[i] = p[j]; p[j] = x; }
   return p;
 }
+// Tränaren från Europaserien (Simons önskan 2026-11-18): när man når Europaserien och Världstouren första gången får man välja om Bosse ska följa med
+// eller om man byter till en tourtränare. Bosse bygger för alltid: veckans egenskap bygger HOT_MULT gånger så mycket, som förut. Tourtränaren läser banan:
+// veckans egenskap är något helgens bana kräver (det av banans tre som har minst skärpa när veckan börjar), och spelträning på den ger MENTOR_SHARP mer
+// i helgen, men den bygger som vanligt. Alltså för alltid mot nu. Valet görs i händelsen coachpick (S.force vid ny nivå, se nextSeason). S.mentor läggs till i migrate.
+const MENTOR = {bosse:{name:'Bosse', ava:'bosse'}, tour:{name:'Kim Sandell', short:'Kim', ava:'coach'}};
+const MENTOR_SHARP = 3, MENTOR_AT = [3, 4];
+const mentorOf = S => S.mentor === 'tour' ? 'tour' : 'bosse';
+const mentorShort = S => mentorOf(S) === 'tour' ? MENTOR.tour.short : MENTOR.bosse.name;
+const mentorTitle = S => mentorOf(S) === 'tour' ? 'tourtränare' : S.tier >= 3 ? 'din tränare' : 'klubbens pro';
+const hotMult = S => mentorOf(S) === 'tour' ? 1 : HOT_MULT;
+function mentorCourse(S){
+  if (!S.sched) return null; const t = S.sched[S.week-1]; if (t) return t.c;
+  for (let w = S.week+1; w <= WEEKS; w++) if (S.sched[w-1]) return S.sched[w-1].c;
+  return null;
+}
+// Skärpan i helgen med tourtränaren: spelträning på veckans egenskap ger MENTOR_SHARP mer. hot räknas när veckan börjar.
+function mentorBoost(S, sh, touch, hot){
+  if (mentorOf(S) === 'tour' && hot && touch[hot] && touch[hot].p) sh[hot] = Math.min(SHARP_MAX + MENTOR_SHARP, sh[hot] + MENTOR_SHARP);
+  return sh;
+}
 function hotStat(S){
   if (S.hot0 == null) return null;
+  if (mentorOf(S) === 'tour'){ const c = mentorCourse(S);
+    if (c){ const top = COURSE[c].top, lo = Math.min.apply(null, top.map(k => sharpOf(S,k))), cand = top.filter(k => sharpOf(S,k) === lo); return cand[(S.clock || 0) % cand.length]; } }
   const w = S.clock || 0, b = Math.floor(w/6), p = hotPerm(S, b);
   if (b > 0 && p[0] === hotPerm(S, b-1)[5]){ const x = p[0]; p[0] = p[1]; p[1] = x; }
   return p[w % 6];
 }
-const trainGain = (S,k,energy,nth,play) => TRAIN_BASE*(1 + TIER_GROW*S.tier)*modeMult(k, play)*(k === hotStat(S) ? HOT_MULT : 1)*REPEAT[Math.min(nth || 0, REPEAT.length-1)]*S.wk.gain*modMul(S,'gain')*(S.camp ? CAMP_MULT : 1)*coachMult(S,k)*(has(S,'student') ? 1.15 : 1)*Math.pow(Math.max(0, 1-S.st[k]/86), 1.6)*(energy < 30 ? .6 : 1);
+const trainGain = (S,k,energy,nth,play) => TRAIN_BASE*(1 + TIER_GROW*S.tier)*modeMult(k, play)*(k === hotStat(S) ? hotMult(S) : 1)*REPEAT[Math.min(nth || 0, REPEAT.length-1)]*S.wk.gain*modMul(S,'gain')*(S.camp ? CAMP_MULT : 1)*coachMult(S,k)*(has(S,'student') ? 1.15 : 1)*Math.pow(Math.max(0, 1-S.st[k]/86), 1.6)*(energy < 30 ? .6 : 1);
 const injuryRisk = (S,eAfter) => .004 + Math.max(0, 20-eAfter)*.02*(1 - S.st.fys/200);
 const CAMP_MULT = 1.5, FIELD_GROWTH = .25, RELEGATE = 5;
 const campCost = S => TIER[S.tier].camp;
@@ -862,19 +925,19 @@ const prepKey = S => { const t = tourThisWeek(S); return t && PREP_MISS[S.tier] 
 
 // Visar vad en plan leder till utan att ändra något.
 function preview(S, plan){
-  let e = S.energy, risk = 0, built = 0; const steps = [], cnt = {}, touch = {};
+  let e = S.energy, risk = 0, built = 0; const steps = [], cnt = {}, touch = {}, hot = hotStat(S);
   for (const a of plan){
     if (a === 'rest'){ e = Math.min(100, e + restGain(S)); steps.push({a, e}); }
     else if (a === 'work'){ e = Math.max(0, e-WORK_E); steps.push({a, e}); }
     else if (a === 'prep'){ const k = prepKey(S), g = k ? trainGain(S, k, e, cnt[k] || 0, true) : 0; if (k){ cnt[k] = (cnt[k] || 0) + 1; touchAdd(touch, 's:' + k); built += g; } e = Math.max(0, e-PREP_E); steps.push({a, k, e, gain:g}); }
     else { const k = passKey(a), r = injuryRisk(S, e-TRAIN_E), g = trainGain(S, k, e, cnt[k] || 0, isPlay(a)); cnt[k] = (cnt[k] || 0) + 1; touchAdd(touch, a); built += g; e = Math.max(0, e-TRAIN_E); risk = 1-(1-risk)*(1-r); steps.push({a, k, e, gain:g, risk:r}); }
   }
-  return {steps, energy:e, risk, sharp:S.injury ? weekendSharp(S.sharp, {}) : weekendSharp(S.sharp, touch), cnt, built};
+  return {steps, energy:e, risk, sharp:S.injury ? weekendSharp(S.sharp, {}) : mentorBoost(S, weekendSharp(S.sharp, touch), touch, hot), cnt, built};
 }
 // neutral: bara för testerna. Hoppar över skärpa och ringrost, så att en mätning inte störs av dem.
 function runWeek(S, plan, enter, camp, neutral){
   const rep = {week:S.week, gains:{}, events:[], kr:0, log:[]}, trained = {}, touch = {};
-  if (!S.sharp) S.sharp = freshSharp();
+  if (!S.sharp) S.sharp = freshSharp(); const hot = hotStat(S);
   S.camp = !!camp && canCamp(S); if (S.camp){ S.money -= campCost(S); rep.events.push('Träningsläger: all träning den här veckan ger 50 % mer.'); }
   for (const a of plan){
     if (S.injury && a !== 'rest' && a !== 'work') continue;
@@ -895,7 +958,7 @@ function runWeek(S, plan, enter, camp, neutral){
     }
   }
   // Skärpan i helgen: det du spelträna är slipat, det du inte rört är ringrostigt.
-  S.sharp = neutral ? freshSharp() : weekendSharp(S.sharp, touch);
+  S.sharp = neutral ? freshSharp() : mentorBoost(S, weekendSharp(S.sharp, touch), touch, hot);
   rep.log.forEach(l => { if (l.k && !l.hurt && isPlay(l.a)) l.sh = S.sharp[l.k]; });
   S.report = rep; S.camp = false;
   if (enter && canEnter(S)){
@@ -1028,12 +1091,58 @@ function courseLuck(S, o, ok, lie, d, left, near){
   if (ok && lie === 'fairway') return r < LUCK.torva.p && worse ? 'torva' : null;
   return null;
 }
+// Släppet efter vattnet (Simon 2026-11-18): ligger bollen i vattnet blir det plikt, ett slag, och man väljer var nästa slag slås:
+// två klubblängder från där bollen gick i vattnet (A, närmare men ofta ett obekvämt slag), eller bakåt på flagglinjen så långt man vill (B, längre men ett fullt slag).
+// I vattenkanten (edge) ligger bollen kvar och kan slås, så där blir det ingen plikt och inget släpp.
+// m: meter till flaggan från släppet. d: svårighet som i TPL. good och bad: ändring av hålets resultat jämfört med utfallet i TPL (bad), så att plikten i snitt kostar ungefär som förut.
+// A svänger mer åt båda hållen, B är jämnare. Mätt 2026-11-18: A är bäst för 30–60 % av spelartyperna (wedgen över vatten 20–35 %, där A är ett kort slag mot en flagga tätt bakom vattnet). Avstånden och vilken egenskap som prövas är Claudes förslag och ska gås igenom med Simon.
+const DROP_AT = {par5:[30, 75], water3:[55, 85], wedge:[30, 60], creek:[150, 175]};
+const DROP_D = {wedge:[56, 52], creek:[54, 53]};
+function dropOpts(tplId){
+  const at = DROP_AT[tplId]; if (!at) return null;
+  // A är ett halvslag (närspel), B ett fullt slag (wedge: närspel och järnspel som i TPL, längre: järnspel och längd). Vid bäcken är båda långa slag, A från slänten.
+  const stat = (m, full) => m <= 100 ? (full ? {nar:.5, jrn:.5} : {nar:1}) : full ? {jrn:.6, lng:.4} : {jrn:1}, dd = DROP_D[tplId] || [53, 52];
+  return [
+    {label:'Släpp vid vattnet', m:at[0], s:stat(at[0], false), a:at[0] <= 30 ? 'arg' : 'app', d:dd[0], good:[[-1,.45],[0,.55]], bad:[[0,.62],[1,.38]],
+      ok:'Från släppet vid vattnet går bollen nära flaggan.', fail:'Från släppet vid vattnet blir slaget inte bra. Bollen stannar en bit från flaggan.'},
+    {label:'Bakåt på flagglinjen', m:at[1], s:stat(at[1], true), a:'app', d:dd[1], good:[[-1,.3],[0,.7]], bad:[[0,.77],[1,.23]],
+      ok:'Fullt slag från flagglinjen. Bollen landar nära flaggan.', fail:'Fullt slag från flagglinjen, men bollen landar en bit från flaggan.'}];
+}
+// Blir det plikt? Bollen i vattnet efter luck, inte i vattenkanten, och minst två slag kvar (plikten och ett slag till).
+function isPenalty(tplId, lie, left){ return lie === 'vatten' && tplId !== 'edge' && !!DROP_AT[tplId] && left != null && left >= 2; }
+// Hålets möjliga resultat efter släppet, som [resultat, chans]. Aldrig sämre än dubbelbogey, aldrig fler än sex slag kvar, och tur kräver minst plikten, släppslaget och en putt.
+function dropOut(T, o, ok){
+  const D = T.drop, out = [];
+  (ok ? o.good : o.bad).forEach(([x, q]) => { let dd = x; if (dd < 0 && D.left + dd < 3) dd = 0; if (dd > 0 && (D.d + dd > 2 || D.left + dd > 6)) dd = 0;
+    const r = D.d + dd, e = out.find(y => y[0] === r); if (e) e[1] += q; else out.push([r, q]); });
+  return out;
+}
+function dropView(S){
+  const T = S.T, D = T.drop, m = T.mom[T.mi], pr = pressure(S);
+  return {drop:true, tpl:m.tpl, hole:m.hole, title:'Plikt, ett slag', text:'Var släpper du?', flip:!!m.flip, pressure:pr, marks:[],
+    opts:dropOpts(m.tpl).map(o => ({label:o.label, m:o.m, stats:Object.keys(o.s), sharp:Object.keys(o.s).reduce((a,k) => a + o.s[k]*sharpOf(S,k), 0), p:optProb(S, o, pr, 0), good:dropOut(T, o, true), bad:dropOut(T, o, false)}))};
+}
+// Spelar släppet: ändrar hålets resultat och slaget i rundans flöde, och går sedan vidare till nästa nyckelläge.
+function playDrop(S, i){
+  const T = S.T, D = T.drop, m = T.mom[T.mi], o = dropOpts(m.tpl)[i] || dropOpts(m.tpl)[1], pr = pressure(S), p = optProb(S, o, pr, 0);
+  const ok = rnd(S) < p, d = sample(S, dropOut(T, o, ok)), dd = d - D.d, f = T.feed[D.fi];
+  T.run += dd; if (T.holes) T.holes[m.hole-1] = d;
+  if (f){ f.d = d; f.left += dd; f.drop = {i, ok, p, dd, m:o.m, a:o.a}; f.txt += ' ' + (ok ? o.ok : o.fail); if (f.ar && f.ar.indexOf(o.a) < 0) f.ar = f.ar.concat([o.a]); }
+  T.drop = null; nextMom(S);
+}
+function nextMom(S){
+  const T = S.T;
+  T.mi++; applySeg(S, T.mi);
+  if (T.mi >= 3){ if (!T.stats) T.stats = []; T.stats[T.r] = roundStats(S); addStat(S, T.stats[T.r], T.run); recRound(S, T.stats[T.r], T.run); T.you.push(T.run); if (T.r === T.rounds-1) finishTournament(S); else { if (T.cutAfter && T.r === T.cutAfter-1) applyCut(S); if (T.missed) finishTournament(S); else T.stage = 'roundEnd'; } }
+}
 function momentView(S){
+  if (S.T.drop) return dropView(S);
   const T = S.T, m = T.mom[T.mi], tpl = TPL[m.tpl], pr = pressure(S);
   const mv = momVar(m);
   return {tpl:m.tpl, hole:m.hole, title:mv.title, text:mv.text, flip:mv.flip, marks:momMarks(m), pressure:pr, opts:tpl.opts.map((o,i) => ({label:o.label, stats:Object.keys(o.s), sharp:Object.keys(o.s).reduce((a,k) => a + o.s[k]*sharpOf(S,k), 0), p:optProb(S,o,pr,mv.dd[i]), good:o.good, bad:o.bad}))};
 }
 function choose(S, i){
+  if (S.T.drop){ playDrop(S, i); return; }
   const T = S.T, m = T.mom[T.mi], tpl = TPL[m.tpl], o = tpl.opts[i], pr = pressure(S), mv = momVar(m), p = optProb(S, o, pr, mv.dd[i]);
   const why = shotWhy(S, tpl, i, pr, p, mv.dd);
   const ok = rnd(S) < p; let d = sample(S, ok ? o.good : o.bad), luck = 0;
@@ -1050,8 +1159,9 @@ function choose(S, i){
   }
   T.run += d; T.thru = m.hole; if (T.holes) T.holes[m.hole-1] = d; const left = o.n && T.pars ? T.pars[m.hole-1] + d - o.n : null;
   T.feed.push({k:'mom', hole:m.hole, title:mv.title, label:o.label, ok, d, txt:sideTxt(txt, mv.flip), flip:mv.flip, p, lie, dist, left, luck, lk, why, pf:puttFrom(m, i), ar:T.pars ? areaKeys(o, T.pars[m.hole-1]) : null});
-  T.mi++; applySeg(S, T.mi);
-  if (T.mi >= 3){ if (!T.stats) T.stats = []; T.stats[T.r] = roundStats(S); addStat(S, T.stats[T.r], T.run); recRound(S, T.stats[T.r], T.run); T.you.push(T.run); if (T.r === T.rounds-1) finishTournament(S); else { if (T.cutAfter && T.r === T.cutAfter-1) applyCut(S); if (T.missed) finishTournament(S); else T.stage = 'roundEnd'; } }
+  // Plikt i vattnet: nyckelläget väntar på släppet (playDrop). Samma steg som förut, så botar som alltid svarar med choose fungerar.
+  if (!ok && T.pars && isPenalty(m.tpl, lie, left)){ T.drop = {fi:T.feed.length-1, d, left, opt:i, tpl:m.tpl}; return; }
+  nextMom(S);
 }
 // Underlag för "beslutet eller slumpen": chansen, vad som höjde eller sänkte den, och om det andra alternativet var bättre räknat på oddsen.
 function shotWhy(S, tpl, i, pr, p, dd){
@@ -1100,11 +1210,11 @@ function roundSG(S){
   const favg = sum(T.field.map(f => f.sc[T.r]))/T.field.length, b = favg/18, v = {tee:0, app:0, arg:0, put:0}, keyH = {}, key = [];
   let j = 0;
   for (const f of T.feed){ if (f.k !== 'mom') continue;
-    const m = T.mom[j++], tpl = TPL[m.tpl], o = tpl.opts.filter(x => x.label === f.label)[0] || tpl.opts[0], ar = optAreas(o, T.pars[m.hole-1]), luck = f.lk ? 0 : (f.luck || 0), x = b - (f.d - luck);
+    const m = T.mom[j++], tpl = TPL[m.tpl], o = tpl.opts.filter(x => x.label === f.label)[0] || tpl.opts[0], ar = optAreas(o, T.pars[m.hole-1]), luck = f.lk ? 0 : (f.luck || 0), dd = f.drop ? f.drop.dd : 0, x = b - (f.d - luck - dd);
     for (const k of SGA) v[k] += x*ar[k];
-    v.put -= luck; keyH[m.hole] = 1;
+    v.put -= luck; if (dd) v[f.drop.a] -= dd; keyH[m.hole] = 1;
     // Vad hålet var värt mot fältets snitt per hål, och vilka delar det räknades till. Bara för visning.
-    const ak = SGA.filter(k => ar[k] > 0).sort((p,q) => ar[q]-ar[p]); if (luck && ak.indexOf('put') < 0) ak.push('put');
+    const ak = SGA.filter(k => ar[k] > 0).sort((p,q) => ar[q]-ar[p]); if (luck && ak.indexOf('put') < 0) ak.push('put'); if (dd && ak.indexOf(f.drop.a) < 0) ak.push(f.drop.a);
     key.push({h:m.hole, l:f.label, a:ak, t:Math.round((b - f.d)*10)}); }
   let rest = 0, n = 0; for (let h=0;h<18;h++) if (!keyH[h+1] && T.holes[h] != null){ rest += b - T.holes[h]; n++; }
   // Fördel mot fältets snitt på de övriga hålen, per område. Längd utan precision straffas på trånga banor, precis som i courseRating.
@@ -1162,6 +1272,7 @@ function leaderboard(S){
 }
 function finishTournament(S){
   const T = S.T, rows = leaderboard(S), t = TIER[S.tier], mult = T.final ? 2 : 1;
+  const rk0 = S.hist.length ? standings(S).find(r => r.id === 'you').rank : null;   // tabellplatsen före helgen; före första tävlingen finns ingen
   rows.forEach((r,i) => { S.pts[r.id] += r.out ? 0 : (PTS[i] || 0)*mult; });
   const idx = rows.findIndex(r => r.id === 'you'), pos = rows[idx].pos;
   const prize = Math.round(t.first*(PRIZE[idx] || 0)*(T.final ? 1.5 : 1)*(S.agent ? .85 : 1)*(1 - Math.min(.6, modSum(S,'cut')))), res = {pos, idx, prize, pts:(PTS[idx] || 0)*mult, tot:rows[idx].tot, notes:[]};
@@ -1178,7 +1289,10 @@ function finishTournament(S){
   // Albumet: varje seger sparas med kläderna och bagen man hade, så att segerbilden kan visas igen på fliken Karriär.
   if (pos === 1){ if (!S.album) S.album = []; S.album.push({s:S.season, w:S.week, c:T.c, tier:S.tier, tot:res.tot, outfit:S.outfit, look:Object.assign({}, S.look), bag:gearLv(S,'bag'), final:!!T.final}); if (S.album.length > 60) S.album.shift(); }
   if (pos === 1 && !S.flags.won){ S.flags.won = true; res.notes.push('Ny outfit i garderoben: ' + OUTFIT.seger.name + '.'); }
-  S.hist.push({week:S.week, c:T.c, pos, prize, pts:res.pts});
+  // Säsongens tävlingar (2026-11-16): resultat mot par, antal rundor och kuttgränsen sparas, så att fliken Touren kan visa dem i efterhand.
+  { const h = {week:S.week, c:T.c, pos, prize:res.prize, pts:res.pts, tot:res.tot, r:T.you.length}; if (T.cut) h.cut = T.cut.line; if (T.missed) h.missed = true; S.hist.push(h); }
+  // Tabellen efter helgen: platsen före och efter och läget mot strecket. Bara visning.
+  { const rc = race(S); res.table = {from:rk0, to:rc.rank, rank:rc.rank, up:rc.up, down:rc.down, top:rc.top, left:rc.left}; }
   if ((S.bets || []).length) settleBets(S, pos, rows, res.notes);
   // Vad veckans träning betydde i helgen: största plus och största minus, vägt mot vad banan kräver.
   if (T.sharp){ const cw = COURSE[T.c].w, by = SK.map(k => ({k, v:T.sharp[k], x:T.sharp[k]*cw[k]})).sort((a,b) => b.x-a.x);
@@ -1199,6 +1313,30 @@ function standings(S){
   rows.sort((a,b) => b.pts-a.pts || (a.id === 'you' ? -1 : b.id === 'you' ? 1 : 0));
   rows.forEach((r,i) => r.rank = i+1); return rows;
 }
+// Säsongens mål (2026-11-16): läget mot strecket. Topp PROMOTE går upp, de RELEGATE sista ner, och högst upp gäller förstaplatsen.
+// Bara läsning: inga slumptal och ingen regel. d är alltid poäng: marginalen ner till första platsen utanför när man ligger innanför (inn),
+// annars avståndet upp till sista platsen innanför. Lika poäng räcker, eftersom spelaren står före vid lika (se standings).
+// max är poängen som finns kvar att ta för en spelare. klar: ingen bakom kan gå förbi. borta: strecket går inte att nå.
+function race(S){
+  const rows = standings(S), n = rows.length, me = rows.find(r => r.id === 'you');
+  let left = 0, max = 0;
+  S.sched.forEach((t,i) => { if (t && i+1 >= S.week && !S.hist.some(h => h.week === i+1)){ left++; max += PTS[0]*(t.final ? 2 : 1); } });
+  const line = (k, inn) => { const d = inn ? me.pts - rows[k].pts : rows[k-1].pts - me.pts; return {n:k, inn, d, klar:inn && d > max, borta:!inn && d > max}; };
+  const top = S.tier === TIER.length-1, upN = top ? 1 : PROMOTE, downN = n - RELEGATE;
+  return {rank:me.rank, pts:me.pts, n, left, max, top, played:S.hist.length, up:line(upN, me.rank <= upN), down:S.tier > 0 ? line(downN, me.rank <= downN) : null};
+}
+// Tabellen just nu (2026-11-16): säsongens tabell om tävlingen slutade som det står mitt i sista rundan. Samma räkning som standing (fältets runda
+// i takt med spelarens hål) och finishTournament (poäng efter plats, dubbelt i finalen). Bara läsning. Visas under finalens sista runda.
+function liveRace(S){
+  const T = S.T; if (!T || S.phase !== 'tour' || T.stage === 'done' || T.r !== T.rounds-1) return null;
+  const frac = T.thru/18, cr = T.cut ? T.cut.r : T.r, mult = T.final ? 2 : 1;
+  const rows = T.field.map(f => ({id:f.id, out:!!f.out, tot:f.out ? sum(f.sc.slice(0,cr)) : sum(f.sc.slice(0,T.r)) + Math.round(f.sc[T.r]*frac)}));
+  rows.push({id:'you', out:false, tot:sum(T.you.slice(0,T.r)) + T.run});
+  rows.sort((a,b) => (a.out ? 1 : 0) - (b.out ? 1 : 0) || a.tot-b.tot || (a.id === 'you' ? -1 : b.id === 'you' ? 1 : 0));
+  const X = {tier:S.tier, week:S.week, name:S.name, field:S.field, sched:S.sched, hist:S.hist.concat([{week:S.week}]), pts:Object.assign({}, S.pts)};
+  rows.forEach((r,i) => { X.pts[r.id] += r.out ? 0 : (PTS[i] || 0)*mult; });
+  return race(X);
+}
 function seasonEnd(S){
   const rank = standings(S).find(r => r.id === 'you').rank;
   const pool = Object.keys(PERK).filter(p => !has(S,p)), offers = [];
@@ -1213,6 +1351,7 @@ function nextSeason(S, perk){
   if (S.final.promoted) S.tier++; else if (S.final.relegated) S.tier--;
   const newTier = S.tier > maxTier({tier:-1, flags:S.flags}) && S.tier > 0; S.flags.maxTier = Math.max(S.flags.maxTier || 0, S.tier);
   S.sponsor = Math.round(S.sponsor/2); setupSeason(S);
+  if (newTier && MENTOR_AT.indexOf(S.tier) >= 0){ if (!S.force) S.force = 'coachpick'; else S.delayed.push({at:S.clock + 1, st:{}, ev:'coachpick'}); }
   if (newTier){ const id = Object.keys(OUTFIT).find(k => OUTFIT[k].tier === S.tier); if (id) S.news.push('Ny outfit i garderoben: ' + OUTFIT[id].name + '.'); }
 }
 
@@ -1510,9 +1649,9 @@ const EVENTS = {
   // ----- Kroppen -----
   wrist:{title:'Känning i handleden', w:1.3, cond:S => S.energy < 60 && S.injury === 0,
     text:S => 'Det hugger till i vänster handled efter gårdagens bollkorgar. Det kan vara ingenting.',
-    opts:[{label:'Kör på som vanligt', hint:S => '12 % risk att det blir en riktig skada', run:S => { if (rnd(S) < .12){ injure(S); return 'Efter tjugo bollar går det inte längre. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } if (rnd(S) < .5) later(S, 3 + int(S,3), {ev:'wrist2'}); return 'Det släpper efter uppvärmningen. Falskt alarm, den här gången.'; }},
-          {label:'Tejpa och ta det lugnare', hint:S => 'Ett pass mindre och −1 i spelstyrka i helgen, 5 % risk för skada', run:S => { S.wk.slots -= 1; S.wk.str -= 1; if (rnd(S) < .05){ injure(S); return 'Tejpen hjälper inte. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } return 'Tejp runt handleden och bara halva korgar. Det håller.'; }},
-          {label:'Vila handleden', hint:S => 'Två pass mindre den här veckan, +10 energi', run:S => { S.wk.slots -= 2; addE(S,10); return 'Is, vila och lätta puttar. Handleden känns bättre.'; }}]},
+    opts:[{label:'Kör på som vanligt', hint:S => '9 % risk att det blir en riktig skada', run:S => { if (rnd(S) < .09){ injure(S); return 'Efter tjugo bollar går det inte längre. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } if (rnd(S) < .5) later(S, 3 + int(S,3), {ev:'wrist2'}); return 'Det släpper efter uppvärmningen. Falskt alarm, den här gången.'; }},
+          {label:'Tejpa och ta det lugnare', hint:S => 'Ett pass mindre och −3 i spelstyrka i helgen, 5 % risk för skada', run:S => { S.wk.slots -= 1; S.wk.str -= 3; if (rnd(S) < .05){ injure(S); return 'Tejpen hjälper inte. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } return 'Tejp runt handleden och bara halva korgar. Det håller.'; }},
+          {label:'Vila handleden', hint:S => 'Två pass mindre den här veckan, +14 energi', run:S => { S.wk.slots -= 2; addE(S,14); return 'Is, vila och lätta puttar. Handleden känns bättre.'; }}]},
   wrist2:{title:'Handleden igen', chain:true, cond:S => S.injury === 0,
     text:S => 'Handleden gör sig påmind igen, värre den här gången. Du kom undan sist.',
     opts:[{label:'Bit ihop', hint:S => '30 % risk för skada', run:S => { if (rnd(S) < .3){ injure(S); return 'Det smäller till i ett bunkerslag. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } return 'Den håller. Du vet inte hur länge.'; }},
@@ -1527,10 +1666,10 @@ const EVENTS = {
     opts:[{label:'Spela ändå', hint:S => '−1,5 i spelstyrka i helgen, −12 energi', run:S => { S.wk.str -= 1.5; addE(S,-12); return 'Du går ut med halstabletter i fickan och räknar hålen som är kvar.'; }},
           {label:'Stanna hemma', hint:S => 'Ingen tävling och två pass mindre den här veckan, +12 energi', run:S => { S.wk.skip = 'Du är sjuk i helgen.'; S.wk.slots -= 2; addE(S,12); return 'Du stryker dig och somnar om. Det var rätt beslut, säger alla utom tabellen.'; }}]},
   overtrain:{title:'Kroppen säger ifrån', w:1.2, cd:20, cond:S => S.energy < 40 && S.injury === 0,
-    text:S => 'Du orkar knappt värma upp. Bosse tittar på dig över glasögonen och säger att du ser sliten ut.',
-    opts:[{label:'Två dagars vila', hint:S => 'Två pass mindre den här veckan, +24 energi', run:S => { S.wk.slots -= 2; addE(S,24); return 'Du sover till tio två dagar i rad. Det var längesen.'; }},
-          {label:'En dags vila', hint:S => 'Ett pass mindre, +11 energi, 7 % risk för skada', run:S => { S.wk.slots -= 1; addE(S,11); if (rnd(S) < .07){ injure(S); return 'En dag räckte inte. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } return 'En sovmorgon och en lugn eftermiddag. Det räcker, nätt och jämnt.'; }},
-          {label:'Kör ändå', hint:S => 'All träning ger 10 % mindre den här veckan, 16 % risk för skada', run:S => { if (rnd(S) < .16){ injure(S); return 'Det tar stopp på tredje bollkorgen. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } S.wk.gain *= .9; return 'Du nöter på, men bollarna går inte dit du tittar.'; }}]},
+    text:S => 'Du orkar knappt värma upp. ' + mentorShort(S) + ' tittar på dig över glasögonen och säger att du ser sliten ut.',
+    opts:[{label:'Två dagars vila', hint:S => 'Två pass mindre den här veckan, +30 energi och form +1', run:S => { S.wk.slots -= 2; addE(S,30); addForm(S,1); return 'Du sover till tio två dagar i rad. Det var längesen.'; }},
+          {label:'En dags vila', hint:S => 'Ett pass mindre, +16 energi, 8 % risk för skada', run:S => { S.wk.slots -= 1; addE(S,16); if (rnd(S) < .08){ injure(S); return 'En dag räckte inte. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } return 'En sovmorgon och en lugn eftermiddag. Det räcker, nätt och jämnt.'; }},
+          {label:'Kör ändå', hint:S => (tourThisWeek(S) && canEnter(S) ? 'Du behåller passen och rytmen: +2 i spelstyrka i helgen. ' : 'Du behåller passen. ') + '9 % risk för skada', run:S => { if (rnd(S) < .09){ injure(S); return 'Det tar stopp på tredje bollkorgen. Du är skadad: ingen tävling den här veckan, och nästa vecka kan du bara vila eller jobba.'; } S.wk.str += 2; return 'Du nöter på. Det gör ont, men rytmen sitter kvar.'; }}]},
   pt:{title:'Fysprogram', w:.9, cd:40, cond:S => S.st.fys < 50 && S.money >= mny(S,2000) + fee(S)*3 && weeksLeft(S) >= 4 && !hasMod(S,'pt'),
     text:S => 'En fystränare erbjuder ett program byggt för golfare, med uppföljning varje vecka resten av säsongen.',
     opts:[{label:'Köp programmet', hint:S => '−' + krs(mny(S,2000)) + ', fys +3 och +6 energi varje vecka resten av säsongen', run:S => { S.money -= mny(S,2000); bump(S,'fys',3); addMod(S, {tag:'pt', label:'Fysprogram', energy:6}); return 'Första veckan gör ont på ställen du inte visste fanns. Sedan orkar du mer.'; }},
@@ -1553,17 +1692,17 @@ const EVENTS = {
   swingdoubt:{title:'Tvivel på svingbytet', chain:true, cond:S => S.delayed.some(d => d.tag === 'swing'),
     text:S => 'Två veckor in i svingbytet känns det sämre än någonsin. Du kan fortfarande gå tillbaka till den gamla.',
     opts:[{label:'Håll ut', hint:S => 'Inget ändras nu. Om två veckor: precision +5 och järnspel +3', run:S => 'Du slår hundra bollar till med handduken under armen.'},
-          {label:'Gå tillbaka till den gamla', hint:S => 'Precision +3, järnspel +2 och form +1 nu. Det nya byggs aldrig färdigt', run:S => { S.delayed = S.delayed.filter(d => d.tag !== 'swing'); bump(S,'prc',3); bump(S,'jrn',2); addForm(S,1); return 'Den gamla svingen sitter kvar i kroppen. Felet också.'; }}]},
+          {label:'Gå tillbaka till den gamla', hint:S => 'Precision +3, järnspel +2 och form +3 nu. Det nya byggs aldrig färdigt', run:S => { S.delayed = S.delayed.filter(d => d.tag !== 'swing'); bump(S,'prc',3); bump(S,'jrn',2); addForm(S,3); return 'Den gamla svingen sitter kvar i kroppen. Felet också.'; }}]},
   grip:{title:'Greppet har glidit', w:1, cond:S => canEnter(S) && !tourThisWeek(S).final && S.injury === 0,
-    text:S => 'Bosse ser att ditt grepp har glidit sedan i våras. Rättar du det nu känns det lite ovant i helgen. Väntar du tar det ett pass nästa vecka.',
-    opts:[{label:'Ändra nu', hint:S => 'Precision +1,5 och järnspel +0,5. −1 i spelstyrka i helgen', run:S => { bump(S,'prc',1.5); bump(S,'jrn',.5); S.wk.str -= 1; return 'Klubban känns lite ovan i handen. Bosse säger att det går över på några dagar.'; }},
-          {label:'Ta det efter helgen', hint:S => 'Nästa vecka: ett pass mindre, precision +1,5 och järnspel +0,5', run:S => { later(S, 1, {slots:-1, st:{prc:1.5, jrn:.5}, msg:'Du och Bosse rättade greppet: ett pass mindre i veckan. Precision +1,5 och järnspel +0,5.'}); return 'Ni bokar måndag förmiddag. I helgen spelar du med det du har.'; }},
+    text:S => '' + mentorShort(S) + ' ser att ditt grepp har glidit sedan i våras. Rättar du det nu känns det lite ovant i helgen. Väntar du tar det ett pass nästa vecka.',
+    opts:[{label:'Ändra nu', hint:S => 'Precision +1,5 och järnspel +0,5. −1 i spelstyrka i helgen', run:S => { bump(S,'prc',1.5); bump(S,'jrn',.5); S.wk.str -= 1; return 'Klubban känns lite ovan i handen. ' + mentorShort(S) + ' säger att det går över på några dagar.'; }},
+          {label:'Ta det efter helgen', hint:S => 'Nästa vecka: ett pass mindre, precision +1,5 och järnspel +0,5', run:S => { later(S, 1, {slots:-1, st:{prc:1.5, jrn:.5}, msg:'Du och ' + mentorShort(S) + ' rättade greppet: ett pass mindre i veckan. Precision +1,5 och järnspel +0,5.'}); return 'Ni bokar måndag förmiddag. I helgen spelar du med det du har.'; }},
           {label:'Låt det vara', hint:S => 'Form +1,5', run:S => { addForm(S,1.5); return 'Det har fungerat hittills. Du litar på händerna.'; }}]},
   yips:{title:'Darr på korta puttar', w:.9, cd:50, cond:S => S.st.put < avgSkill(S) && !S.delayed.some(d => d.tag === 'yips'),
     text:S => 'De korta puttarna har börjat rycka. Du missar från en meter på övningsgreenen, gång på gång.',
-    opts:[{label:'Byt grepp helt', hint:S => 'Putt −4 nu. Om tre veckor: putt +7', run:S => { bump(S,'put',-4); later(S, 3, {tag:'yips', st:{put:7}, msg:'Det nya puttgreppet sitter. Putt +7.'}); return 'Klogreppet ser konstigt ut och känns värre. Men händerna rycker inte.'; }},
-          {label:'Nöt tusen puttar', hint:S => 'Två pass mindre. 65 % chans: putt +2,5. Annars form −2', run:S => { S.wk.slots -= 2; if (rnd(S) < .65){ bump(S,'put',2.5); return 'Någonstans runt den sjuhundrade släpper det.'; } addForm(S,-2); return 'Tusen puttar senare rycker det fortfarande.'; }},
-          {label:'Vänta ut det', hint:S => '50 % chans att det går över. Annars putt −2', run:S => { if (rnd(S) < .5) return 'En morgon är det bara borta. Du vågar knappt tänka på det.'; bump(S,'put',-2); return 'Det går inte över. Nu börjar du undvika korta puttar på träningen också.'; }}]},
+    opts:[{label:'Byt grepp helt', hint:S => 'Putt −4 nu. Om tre veckor: putt +5', run:S => { bump(S,'put',-4); later(S, 3, {tag:'yips', st:{put:5}, msg:'Det nya puttgreppet sitter. Putt +5.'}); return 'Klogreppet ser konstigt ut och känns värre. Men händerna rycker inte.'; }},
+          {label:'Nöt tusen puttar', hint:S => 'Två pass mindre. 80 % chans: putt +3,5. Annars form −1', run:S => { S.wk.slots -= 2; if (rnd(S) < .8){ bump(S,'put',3.5); return 'Någonstans runt den sjuhundrade släpper det.'; } addForm(S,-1); return 'Tusen puttar senare rycker det fortfarande.'; }},
+          {label:'Vänta ut det', hint:S => '60 % chans att det går över. Annars putt −1,5', run:S => { if (rnd(S) < .6) return 'En morgon är det bara borta. Du vågar knappt tänka på det.'; bump(S,'put',-1.5); return 'Det går inte över. Nu börjar du undvika korta puttar på träningen också.'; }}]},
   mental:{title:'Två dagar om tävlingspsykologi', w:.9, v:2, cond:S => S.st.men < 70,
     text:(S,v) => pv(v, ['En idrottspsykolog håller en tvådagarskurs om rutiner under press. Den krockar med din träning.', 'Förbundet bjuder in till två dagar om att spela under press, med en före detta tourspelare. Det krockar med din träning.']),
     opts:[{label:'Gå dit', hint:S => 'Två pass mindre, huvud +3', run:S => { S.wk.slots -= 2; bump(S,'men',3); return 'Du går hem med en andningsrutin och en lapp i bagen.'; }},
@@ -1605,7 +1744,7 @@ const EVENTS = {
           {label:'Deras caddie i helgen', hint:S => '+3 i spelstyrka i helgen', run:S => { S.wk.str += 3; return 'Sponsorns egen caddie har gått banan hundra gånger. Han tar din bag i helgen.'; }},
           {label:'Utprovning om du går bra', hint:S => 'Topp 5 i helgen: dina två svagaste egenskaper +2,5. Annars ingenting',
             run:S => { const lo = SK.slice().sort((a,b) => S.st[a]-S.st[b]), st = {}; st[lo[0]] = 2.5; st[lo[1]] = 2.5; S.bets.push({tag:'bonus', label:'Topp 5 ger utprovning av bagen', top:5, win:{later:{st, msg:'Sponsorn höll sitt löfte: en hel dag hos utprovaren. ' + STAT[lo[0]].n + ' och ' + STAT[lo[1]].n.toLowerCase() + ' +2,5.'}}, lose:{}, winMsg:'Topp fem: sponsorn bokar en utprovning av hela bagen åt dig nästa vecka.', loseMsg:'Det blev ingen utprovning från sponsorn den här gången.'}); return 'Du tror på dig själv. Sponsorn ler och säger att utprovaren är bokad, om du levererar.'; }}]},
-  bossebet:{title:'Bosses löfte', w:1, cd:20, cond:S => canEnter(S) && !tourThisWeek(S).final && S.injury === 0,
+  bossebet:{title:'Bosses löfte', w:1, cd:20, cond:S => mentorOf(S) === 'bosse' && canEnter(S) && !tourThisWeek(S).final && S.injury === 0,
     text:S => 'Bosse tycker att du spelar bäst när du har något att spela för. Topp åtta i helgen ger en hel dag med honom. Annars plockar du bollar åt juniorerna.',
     opts:[{label:'Anta', hint:S => 'Topp 8 i helgen: nästa vecka ett pass mer och ' + STAT[lowSkill(S)].n.toLowerCase() + ' +2. Annars ett pass mindre nästa vecka',
             run:S => { const k = lowSkill(S), st = {}; st[k] = 2; S.bets.push({tag:'bossebet', label:'Bosses löfte: topp 8', top:8, win:{later:{slots:1, st, msg:'En hel dag på banan med Bosse: ett pass mer i veckan och ' + STAT[k].n.toLowerCase() + ' +2.'}}, lose:{later:{slots:-1, msg:'Du plockar bollar åt juniorerna, som du lovade Bosse: ett pass mindre i veckan.'}}, winMsg:'Topp åtta: Bosse håller sitt löfte. Nästa vecka får du en hel dag med honom.', loseMsg:'Det blev ingen dag med Bosse. Nästa vecka plockar du bollar åt juniorerna.'}); return 'Ni tar i hand på det. Bosse ser nöjd ut redan nu.'; }},
@@ -1625,13 +1764,53 @@ const EVENTS = {
           {label:'Spela din egen tävling', hint:S => 'Du spelar helgen som vanligt', run:S => 'Poängen i tabellen är viktigare just nu. Du tackar nej.'}]},
   natcamp:{title:'Landslagsläger', w:.8, cd:30, cond:S => S.tier >= 1 && S.tier <= 3 && canEnter(S) && !tourThisWeek(S).final && avgSkill(S) >= TIER[S.tier].mean - 2,
     text:S => 'Förbundskaptenen bjuder in dig till ett läger med landslaget. Det ligger samma helg som tävlingen.',
-    opts:[{label:'Åk på lägret', hint:S => 'Ingen tävling och tre pass mindre den här veckan. Dina två svagaste egenskaper +2 och huvud +1', run:S => { const lo = SK.slice().sort((a,b) => S.st[a]-S.st[b]); S.wk.skip = 'Du är på landslagsläger i helgen.'; S.wk.slots -= 3; bump(S,lo[0],2); bump(S,lo[1],2); bump(S,'men',1); return 'Tre dagar med landets bästa tränare. ' + STAT[lo[0]].n + ' och ' + STAT[lo[1]].n.toLowerCase() + ' +2.'; }},
-          {label:'Spela tävlingen', hint:S => 'Du spelar helgen som vanligt', run:S => 'Du tackar nej. Förbundskaptenen säger att det kommer fler läger. Kanske.'}]},
+    opts:[{label:'Åk på lägret', hint:S => 'Ingen tävling och tre pass mindre den här veckan, form −1. Dina två svagaste egenskaper +1,5 och huvud +1', run:S => { const lo = SK.slice().sort((a,b) => S.st[a]-S.st[b]); S.wk.skip = 'Du är på landslagsläger i helgen.'; S.wk.slots -= 3; bump(S,lo[0],1.5); bump(S,lo[1],1.5); bump(S,'men',1); addForm(S,-1); return 'Tre dagar med landets bästa tränare. ' + STAT[lo[0]].n + ' och ' + STAT[lo[1]].n.toLowerCase() + ' +1,5.'; }},
+          {label:'Spela tävlingen', hint:S => 'Förbundskaptenen kommer och tittar: +1,5 i spelstyrka i helgen', run:S => { S.wk.str += 1.5; return 'Du tackar nej, men förbundskaptenen säger att hon kommer och tittar i helgen. Det tänder dig.'; }}]},
   nerves:{title:'Natten före finalen', w:3, v:2, cd:18, cond:S => canEnter(S) && tourThisWeek(S).final && myRank(S) <= 8,
     text:(S,v) => pv(v, ['Det är natten före finalen och du ligger med i toppen. Klockan är två, och du har inte somnat.', 'Kvällen före finalen sitter du ensam på rummet med tabellen i telefonen. Du har läst den tjugo gånger, och sömnen kommer inte.']),
     opts:[{label:'Ta en sömntablett', hint:S => '65 % chans: +10 energi. Annars −2 i spelstyrka i finalen', run:S => { if (rnd(S) < .65){ addE(S,10); return 'Du sover sex timmar i sträck och vaknar före klockan.'; } S.wk.str -= 2; return 'Du vaknar med bomull i huvudet. Första tee är om en timme.'; }},
           {label:'Putta på hotellmattan', hint:S => '−8 energi, +1 i spelstyrka i finalen', run:S => { addE(S,-8); S.wk.str += 1; return 'Femtio puttar mot ett tandborstglas. Någonstans där släpper det.'; }},
           {label:'Ring hem', hint:S => 'Form +1', run:S => { addForm(S,1); return 'Ni pratar om allt utom golf. Du somnar med telefonen i handen.'; }}]},
+  // ----- Europaserien och Världstouren (2026-11-16 kväll): resor, mästerskap och hemmapublik -----
+  majorq:{title:'Kval till en major', w:1.4, cd:30, cond:S => S.tier >= 3 && !tourThisWeek(S) && S.injury === 0 && weeksLeft(S) >= 2,
+    text:S => 'På måndag spelas kval till ett av årets stora mästerskap: 36 hål på en dag, och bara de fyra bästa går vidare. Veckan är ledig, men kvalet tar två dagar.',
+    opts:[{label:'Spela kvalet', hint:S => 'Två pass mindre, −15 energi. ' + pct(majorP(S)) + ' chans: huvud +3, form +3 och en ny sponsor. Annars form −2',
+            run:S => { S.wk.slots -= 2; addE(S,-15); if (rnd(S) < majorP(S)){ bump(S,'men',3); addForm(S,3); S.sponsor += r100(TIER[S.tier].sponsor*.3); S.flags.major = (S.flags.major || 0) + 1; return 'Du sätter en tvåmetersputt på sista hålet och tar den fjärde platsen. Telefonen ringer innan du har hunnit av greenen.'; }
+              addForm(S,-2); return 'Två slag från en plats. Du åker hem med en lång lista på allt som hade kunnat gå annorlunda.'; }},
+          {label:'Träna som planerat', hint:S => 'Du behåller passen och energin', run:S => 'Du följer kvalet i telefonen mellan bollkorgarna.'}]},
+  jetlag:{title:'Långt flyg till tävlingen', w:1.2, v:2, cd:25, cond:S => S.tier >= 3 && canEnter(S) && !tourThisWeek(S).final,
+    text:(S,v) => pv(v, ['Veckans tävling ligger sju timmar bort. Flyger du som vanligt landar du på onsdagen, och kroppen tror att det är natt på första tee.',
+      'Tävlingen går på andra sidan Atlanten. Kommer du fram först på onsdagen hinner kroppen inte ställa om, och du sover dåligt hela veckan.']),
+    opts:[{label:'Flyg ner tidigt', hint:S => '−' + krs(mny(S,1500)) + ' för hotellnätterna och ett pass mindre. Inget tapp i helgen', run:S => { S.money -= mny(S,1500); S.wk.slots -= 1; return 'Du landar på söndagen och går på banan i dagsljus två dagar i rad. På torsdag sover du som vanligt.'; }},
+          {label:'Flyg som vanligt', hint:S => '−4 i spelstyrka i helgen, −8 energi', run:S => { S.wk.str -= 4; addE(S,-8); return 'Du vaknar klockan tre varje natt och äter frukost som om det vore lunch.'; }},
+          {label:'Sov på planet', hint:S => '50 % chans: inget tapp. Annars −7 i spelstyrka i helgen', run:S => { if (rnd(S) < .5) return 'Ögonbindel, öronproppar och tio timmars sömn. Du kliver av planet utvilad.'; S.wk.str -= 7; return 'En bebis två rader bakom dig skriker hela natten. Du kommer fram mer trött än när du åkte.'; }}]},
+  homecrowd:{title:'Tävlingen på hemmaplan', w:1, cd:60, cond:S => S.tier >= 3 && canEnter(S) && !tourThisWeek(S).final,
+    text:S => 'Veckans tävling går i Sverige. Tidningarna vill ha intervjuer, din gamla klubb ordnar en buss, och alla vill ha en stund med dig.',
+    opts:[{label:'Ge alla tid', hint:S => 'Ett pass mindre, −10 energi, sponsorpengarna +' + krs(r100(TIER[S.tier].sponsor*.2)) + ' i veckan. ' + pct(homeP(S)) + ' chans att publiken bär dig: +2,5 i helgen. Annars −1,5',
+            run:S => { S.wk.slots -= 1; addE(S,-10); S.sponsor += r100(TIER[S.tier].sponsor*.2); if (rnd(S) < homeP(S)){ S.wk.str += 2.5; return 'Du skriver autografer i en timme varje dag. På första tee ropar en hel buss ditt namn, och det lyfter dig.'; } S.wk.str -= 1.5; return 'Du skriver autografer i en timme varje dag. På första tee ropar en hel buss ditt namn, och händerna skakar.'; }},
+          {label:'Lova publiken topp 10', hint:S => 'Topp 10 i helgen: form +4 och sponsorpengarna +25 %. Annars form −2', run:S => { S.bets.push({tag:'homecrowd', label:'Löfte till hemmapubliken: topp 10', top:10, win:{form:4, sponsorMul:1.25}, lose:{form:-2}, winMsg:'Topp tio på hemmaplan. Publiken på sista green står upp, och sponsorerna ringer på måndagen.', loseMsg:'Det blev ingen topp tio på hemmaplan. Rubrikerna på måndagen svider.'}); return 'Du säger det rakt ut i tv: topp tio, minst. Nu vet alla vad du spelar för.'; }},
+          {label:'Skärma av dig', hint:S => 'Du behåller passen och energin', run:S => 'Du stänger av telefonen och bor på ett hotell en mil bort.'}]},
+  // ----- Världstouren (2026-11-18): bara på högsta nivån -----
+  worldone:{title:'I boll med världsettan', w:1.2, v:2, cd:30, cond:S => S.tier >= 4 && canEnter(S) && !tourThisWeek(S).final && S.injury === 0,
+    text:(S,v) => pv(v, ['Startlistan är ute: de två första rundorna går du i samma boll som världsettan. Tusentals åskådare och tv-kameror på varje hål.',
+      'Du är lottad i helgens mest bevakade boll, med världsettan och förra årets segrare. Halva publiken kommer att gå med er.']),
+    opts:[{label:'Lär av honom', hint:S => STAT[lowSkill(S)].n + ' +1,5. −2,5 i spelstyrka i helgen', run:S => { const k = lowSkill(S); bump(S,k,1.5); S.wk.str -= 2.5; return 'Du tittar på varje slag han slår och glömmer ibland ditt eget. Men du ser saker man aldrig ser på tv. ' + STAT[k].n + ' +1,5.'; }},
+          {label:'Visa att du hör hemma här', hint:S => pct(oneP(S)) + ' chans: +3 i spelstyrka i helgen och huvud +1. Annars −3. Ditt huvud avgör',
+            run:S => { if (rnd(S) < oneP(S)){ S.wk.str += 3; bump(S,'men',1); return 'Du slår ut först på ettan, rakt i fairway, och slutar inte gå med honom på hela helgen.'; } S.wk.str -= 3; return 'Du försöker slå lika långt som han på ettan och hamnar i träden. Det sätter tonen.'; }},
+          {label:'Spela ditt eget spel', hint:S => 'Form +1', run:S => { addForm(S,1); return 'Du tar i hand på första tee och tittar sedan bara på din egen boll.'; }}]},
+  coachpick:{title:S => mentorOf(S) === 'tour' ? 'Kim eller Bosse?' : 'Ska Bosse följa med?', w:1, chain:true, cond:S => S.tier >= 3,
+    text:S => mentorOf(S) === 'tour' ? 'Du är på ' + TIER[S.tier].name + '. Bosse ringer och säger att han gärna kommer tillbaka om du vill. Kim tycker att ni har hittat något som fungerar.'
+      : 'Du har tagit dig till ' + TIER[S.tier].name + '. Tourtränaren Kim Sandell har sett dig spela och vill jobba med dig. Bosse säger att han följer med om du vill.',
+    opts:[{label:S => mentorOf(S) === 'tour' ? 'Tillbaka till Bosse' : 'Behåll Bosse', hint:S => 'Veckans egenskap: +' + Math.round((HOT_MULT-1)*100) + ' % för alltid',
+            run:S => { const was = mentorOf(S); S.mentor = 'bosse'; return was === 'bosse' ? 'Bosse packar bagen och följer med. Han har sett varje sving du har slagit sedan du var tolv.' : 'Bosse är tillbaka. Första dagen står ni på rangen i fyra timmar och pratar nästan inte alls.'; }},
+          {label:S => mentorOf(S) === 'tour' ? 'Behåll Kim' : 'Byt till Kim Sandell', hint:S => 'Veckans egenskap är något banan kräver. Spelträning på den: +' + MENTOR_SHARP + ' mer i helgen',
+            run:S => { const was = mentorOf(S); S.mentor = 'tour'; return was === 'tour' ? 'Kim nickar och tar fram banguiden till helgens bana.' : 'Bosse tar det bättre än du trodde. Kim börjar med att gå igenom banguiden till helgens bana.'; }}]},
+  bossevisit:{title:'Tränaren vill ändra något', w:1.1, cd:40, cond:S => S.tier >= 4 && canEnter(S) && !tourThisWeek(S).final && S.injury === 0 && weeksLeft(S) >= 2,
+    text:S => 'Din tränare står bakom dig på rangen inför tävlingen. Han ser att ' + STAT[lowSkill(S)].n.toLowerCase() + ' halkar efter resten av ditt spel och vill ändra något redan den här veckan.',
+    opts:[{label:'Ändra nu', hint:S => 'Ett pass mindre, −2 i spelstyrka i helgen. ' + STAT[lowSkill(S)].n + ' +2,5',
+            run:S => { const k = lowSkill(S); S.wk.slots -= 1; S.wk.str -= 2; bump(S,k,2.5); return 'Ni jobbar med det i två dagar. Det sitter inte än när tävlingen börjar, men du känner att det är rätt. ' + STAT[k].n + ' +2,5.'; }},
+          {label:'Efter tävlingen', hint:S => STAT[lowSkill(S)].n.toLowerCase() + ' +1,5 nästa vecka', run:S => { const k = lowSkill(S), st = {}; st[k] = 1.5; later(S, 1, {st, msg:'Du och tränaren tog ändringen veckan efter tävlingen. ' + STAT[k].n + ' +1,5.'}); return 'Ni skriver upp det och tar det på måndag. Den här veckan spelar du med det du har.'; }},
+          {label:'Låt det vara', hint:S => 'Form +1', run:S => { addForm(S,1); return 'Du säger att det fungerar som det är just nu. Han nickar och tar fram bollkorgen.'; }}]},
   // ----- Folk omkring dig -----
   match:{title:'Pengaspel', w:1, cd:30, cond:S => S.injury === 0 && !!rival(S,'star') && S.money >= mny(S,2000),
     text:S => rival(S,'star').name + ' vill spela nio hål om ' + krs(mny(S,2000)) + ' i morgon. Halva klubbhuset hör frågan.',
@@ -1642,8 +1821,8 @@ const EVENTS = {
           {label:'Avböj', hint:S => 'Form −1', run:S => { addForm(S,-1); return rival(S,'star').name + ' ser till att alla hör att du tackade nej.'; }}]},
   talk:{title:'Snack i omklädningsrummet', w:1, cond:S => canEnter(S) && !!rival(S,'star'),
     text:S => rival(S,'star').name + ' säger högt i omklädningsrummet att du aldrig håller när det gäller.',
-    opts:[{label:'Svara inför alla', hint:S => 'Ditt huvud avgör: +4 eller −4 i spelstyrka i helgen', run:S => { if (rnd(S) < sig((S.st.men-45)/10)){ S.wk.str += 4; return 'Du svarar lugnt och går ut och spelar som om du hade något att bevisa.'; } S.wk.str -= 4; return 'Du svarar, men orden sitter kvar på första tee.'; }},
-          {label:'Låt det rinna av', hint:S => 'Huvud +1', run:S => { bump(S,'men',1); return 'Du knyter skorna och går ut. Det kostade honom mer än dig.'; }}]},
+    opts:[{label:'Svara inför alla', hint:S => pct(talkP(S)) + ' chans: +5 i spelstyrka i helgen. Annars −2. Ditt huvud avgör', run:S => { if (rnd(S) < talkP(S)){ S.wk.str += 5; return 'Du svarar lugnt och går ut och spelar som om du hade något att bevisa.'; } S.wk.str -= 2; return 'Du svarar, men orden sitter kvar på första tee.'; }},
+          {label:'Låt det rinna av', hint:S => 'Huvud +0,5', run:S => { bump(S,'men',.5); return 'Du knyter skorna och går ut. Det kostade honom mer än dig.'; }}]},
   tip:{title:'Råd från veteranen', w:1, cond:S => !!rival(S,'vet'),
     text:S => rival(S,'vet').name + ' stannar bakom dig på rangen och tittar en stund. "Får jag säga en sak?"',
     opts:[{label:'Lyssna', hint:S => '55 % chans: din svagaste egenskap +3. Annars form −3 och −2 i spelstyrka i helgen', run:S => { const rv = rival(S,'vet'); if (rnd(S) < .55){ const k = lowSkill(S); bump(S,k,3); rv.rel += 1; if (weeksLeft(S) >= 5 && !hasMod(S,'mentor')) later(S, 2, {ev:'mentor'}); return 'Han flyttar dina händer två centimeter. ' + STAT[k].n + ' +3.'; } addForm(S,-3); S.wk.str -= 2; return 'Rådet låter klokt, men nu tänker du på sex saker i baksvingen.'; }},
@@ -1658,8 +1837,8 @@ const EVENTS = {
           {label:'Säg att du inte hinner', hint:S => 'Han minns det', run:S => { rival(S,'kid').rel -= 1; later(S, 3, {rv:'kid', off:1, msg:rival(S,'kid').name + ' har hittat puttningen igen, utan din hjälp. Han spelar bättre än på länge.'}); return 'Han nickar och går. Det blir tyst en stund.'; }}]},
   helpback:{title:'En gentjänst', w:2.5, cd:20, cond:S => S.flags.helped != null && S.clock - S.flags.helped >= 3 && canEnter(S) && !!rival(S,'kid'),
     text:S => rival(S,'kid').name + ' har spelat helgens bana sedan han var tio. Han minns att du hjälpte honom och vill ge något tillbaka.',
-    opts:[{label:'Gå igenom banan med honom', hint:S => 'Ett pass mindre, +3 i spelstyrka i helgen', run:S => { S.flags.helped = null; S.wk.slots -= 1; S.wk.str += 3; return 'Han ritar i din banguide tills den är full. "Missa aldrig till höger på fjortonde."'; }},
-          {label:'Träna ihop hela veckan', hint:S => 'All träning den här veckan ger 25 % mer', run:S => { S.flags.helped = null; S.wk.gain *= 1.25; rival(S,'kid').rel += 1; return 'Han matar bollar och du slår. Sedan byter ni. Det går fortare när man är två.'; }}]},
+    opts:[{label:'Gå igenom banan med honom', hint:S => 'Ett pass mindre, +5 i spelstyrka i helgen', run:S => { S.flags.helped = null; S.wk.slots -= 1; S.wk.str += 5; return 'Han ritar i din banguide tills den är full. "Missa aldrig till höger på fjortonde."'; }},
+          {label:'Träna ihop hela veckan', hint:S => 'All träning den här veckan ger ' + hbGain(S) + ' % mer', run:S => { S.flags.helped = null; S.wk.gain *= 1 + hbGain(S)/100; rival(S,'kid').rel += 1; return 'Han matar bollar och du slår. Sedan byter ni. Det går fortare när man är två.'; }}]},
   roommate:{title:'Dela rum på resorna', w:.9, cd:60, cond:S => S.tier >= 1 && weeksLeft(S) >= 5 && !!rival(S,'kid') && !hasMod(S,'roommate'),
     text:S => rival(S,'kid').name + ' föreslår att ni delar bil och hotellrum resten av säsongen och tränar ihop på kvällarna. Han pratar golf till midnatt.',
     opts:[{label:'Dela', hint:S => '+' + krs(r100(TIER[S.tier].living*.45)) + ' i veckan och all träning ger 12 % mer. −5 energi varje vecka resten av säsongen', run:S => { addMod(S, {tag:'roommate', label:'Delar rum', money:r100(TIER[S.tier].living*.45), gain:1.12, energy:-5}); rival(S,'kid').rel += 1; return 'Han snarkar också. Det nämnde han inte.'; }},
@@ -1704,15 +1883,24 @@ const EVENTS = {
           {label:'Träna i stället', hint:S => 'Du behåller passen', run:S => 'Du står på rangen och hör applåderna från artonde green.'}]},
   extra:{title:'Extra deltävling', w:3, cd:20, cond:S => !tourThisWeek(S) && S.injury === 0 && S.money >= fee(S),
     text:S => 'Touren har fått in en extra deltävling den här veckan, med halva fältet på plats. Den ger poäng i tabellen, men då blir det ingen ledig vecka.',
-    opts:[{label:'Ställ upp', hint:S => '−' + krs(fee(S)) + ', två pass mindre och −12 energi. ' + pct(extraP(S)) + ' chans på topp fem: +25 poäng. Annars inga poäng',
-            run:S => { S.money -= fee(S); S.wk.slots -= 2; addE(S,-12); if (rnd(S) < extraP(S)){ S.pts.you += 25; addForm(S,1); return 'Du slutar bland de fem bästa. 25 poäng till i tabellen, och en bra känsla med hem.'; } return 'Du hamnar i mitten av fältet. Inga poäng, och två dagar i bilen.'; }},
+    opts:[{label:'Ställ upp', hint:S => '−' + krs(fee(S)) + ', ett pass mindre och −12 energi. ' + pct(extraP(S)) + ' chans på topp fem: +30 poäng. Annars inga poäng',
+            run:S => { S.money -= fee(S); S.wk.slots -= 1; addE(S,-12); if (rnd(S) < extraP(S)){ S.pts.you += 30; addForm(S,1); return 'Du slutar bland de fem bästa. 30 poäng till i tabellen, och en bra känsla med hem.'; } return 'Du hamnar i mitten av fältet. Inga poäng, och två dagar i bilen.'; }},
           {label:'Ta den lediga veckan', hint:S => 'Du behåller passen och energin', run:S => 'Du följer resultaten i telefonen från rangen.'}]},
   trip:{title:(S,v) => pv(v, ['Kompisarna åker till fjällen', 'Kompisarna hyr en stuga']), w:1.2, v:2, cd:25, cond:S => !tourThisWeek(S),
     text:(S,v) => pv(v, ['Det är tävlingsfritt, och kompisarna åker till fjällen i fyra dagar. De har ett rum över.', 'Det är tävlingsfritt, och kompisarna har hyrt en stuga vid havet i fyra dagar. De frågar om du hänger med.']),
     opts:[{label:'Åk med', hint:S => 'Två pass mindre, +30 energi, form +2 och huvud +1,5', run:S => { S.wk.slots -= 2; addE(S,30); addForm(S,2); bump(S,'men',1.5); return 'Fyra dagar utan en enda golfklubba. Du längtar tillbaka redan på tredje.'; }},
           {label:'Stanna och träna', hint:S => 'Du behåller passen', run:S => 'Du får bilder i gruppchatten hela veckan.'}]},
 };
+// Hemmapubliken (Simon 2026-11-16 kväll: "kan hjälpa, men kan också gå åt andra hållet, olika från person till person"): chansen följer huvudet.
+const homeP = S => clamp(sig((S.st.men - TIER[S.tier].mean)/8 + .3), .3, .8);
+// En gentjänst (2026-11-18): Simon samma dag: att känna banan spelar roll på alla nivåer, så +5 i helgen står kvar. Från Europaserien ger träna ihop 25 % (veckans tre pass är färre att dela på).
+const hbGain = S => S.tier >= 3 ? 25 : 15;
+// I boll med världsettan (2026-11-18): chansen att växa i stället för att krympa följer huvudet mot fältet, 30–70 %.
+const oneP = S => clamp(sig((S.st.men - TIER[S.tier].mean)/8), .3, .7);
+const majorP = S => clamp(sig((avgSkill(S) - TIER[S.tier].mean)/5 + .3), .15, .6);
 const wildP = S => clamp(sig((avgSkill(S) - TIER[S.tier+1].mean + 3)/6), .08, .6);
+// Snacket i omklädningsrummet (2026-11-17): chansen står på knappen och följer huvudet, 25–80 %.
+const talkP = S => clamp(sig((S.st.men-42)/10), .25, .8);
 const extraP = S => clamp(sig((avgSkill(S) - TIER[S.tier].mean - 3)/4), .1, .8);
 const champP = S => clamp(sig((avgSkill(S) - TIER[S.tier].mean)/5 + .6), .25, .9);
 const EV_CD = 30;   // veckor innan samma händelse får komma igen (var 9)
@@ -1734,7 +1922,8 @@ function rollEvent(S){
 }
 function eventView(S){
   if (!S.event) return null; const e = EVENTS[S.event.id], v = S.event.v || 0, f = x => typeof x === 'function' ? x(S, v) : x;
-  return {title:S.event.title || f(e.title), text:S.event.text, pick:S.event.pick, res:S.event.res, opts:e.opts.map((o,i) => ({label:S.event.labels ? S.event.labels[i] : f(o.label), hint:S.event.hints[i]}))};
+  // En äldre sparfil kan sakna sparade knapptexter, eller ha färre än händelsen har nu: då räknas de om (2026-11-19 kväll).
+  return {title:S.event.title || f(e.title), text:S.event.text || e.text(S, v), pick:S.event.pick, res:S.event.res, opts:e.opts.map((o,i) => ({label:S.event.labels && S.event.labels[i] != null ? S.event.labels[i] : f(o.label), hint:S.event.hints && S.event.hints[i] != null ? S.event.hints[i] : o.hint(S, v)}))};
 }
 function pickEvent(S, i){ if (!S.event || S.event.pick != null) return; S.event.pick = i; S.event.res = EVENTS[S.event.id].opts[i].run(S, S.event.v || 0); }
 
@@ -1759,8 +1948,22 @@ function migrate(S){
   if (!S.wk) S.wk = freshWk();
   if (!S.look) S.look = freshLook(S.hot0 || 1); if (!S.outfit || !OUTFIT[S.outfit]) S.outfit = 'klubb'; if (!S.wardrobe) S.wardrobe = ['klubb','vit']; if (!S.gear) S.gear = freshGear(); GEAR_KEYS.forEach(k => { if (S.gear[k] == null) S.gear[k] = 0; });
   if (!S.flags) S.flags = {}; if (!S.mods) S.mods = []; if (!S.bets) S.bets = []; if (S.force === undefined) S.force = null;
+  // Namn som inte finns längre (2026-11-19 kväll, test/oldsaves.js): en händelse, tränare, förmåga eller utrustningsnivå som har bytt namn
+  // eller tagits bort ska inte låsa sparfilen. Händelsen stryks (obesvarad har den inte gjort något, besvarad har den redan gjort sitt).
+  if (S.event && !EVENTS[S.event.id]) S.event = null;
+  if (!COACH[S.coach]) S.coach = 0;
+  if (S.perks) S.perks = S.perks.filter(p => PERK[p]); if (S.final && S.final.offers) S.final.offers = S.final.offers.filter(p => PERK[p]);
+  GEAR_KEYS.forEach(k => { S.gear[k] = clamp(Math.round(+S.gear[k] || 0), 0, GEAR_MAX); });
+  if (S.T && S.T.mom && S.T.pars) S.T.mom.forEach((m, i) => { if (TPL[m.tpl] || (i === S.T.mi && S.T.drop)) return;   // ett nyckelläge som bytt namn byts mot ett med samma par
+    const par = S.T.pars[m.hole-1], alt = Object.keys(TPL).find(id => (TPAR[id] || 4) === par) || Object.keys(TPL)[0]; m.tpl = alt; m.v = 0; });
+  // Släpp som väntar i ett nyckelläge som bytt namn eller inte har släpp längre (2026-11-20): byts mot ett vattenläge med samma par.
+  // Finns inget vattenläge kvar stryks släppet och hålet står kvar som utfallet sa. Inga slumptal.
+  if (S.T && S.T.drop && S.T.mom && S.T.mom[S.T.mi] && !dropOpts(S.T.mom[S.T.mi].tpl)){ const T = S.T, m = T.mom[T.mi], par = T.pars ? T.pars[m.hole-1] : 4, ws = Object.keys(DROP_AT).filter(id => TPL[id]);
+    const alt = ws.find(id => (TPAR[id] || 4) === par) || ws[0];
+    if (alt){ m.tpl = alt; m.v = 0; T.drop.tpl = alt; } else { T.drop = null; nextMom(S); } }
   if (!S.sharp) S.sharp = freshSharp();
-  for (const k of SK) S.sharp[k] = clamp(S.sharp[k] || 0, SHARP_MIN, SHARP_MAX);
+  if (S.mentor == null){ S.mentor = 'bosse'; if (S.tier >= 3 && !S.force) S.force = 'coachpick'; }   // sparfil från före tränarvalet: den som redan är på Europaserien får välja nästa vecka
+  for (const k of SK) S.sharp[k] = clamp(S.sharp[k] || 0, SHARP_MIN, SHARP_MAX + (mentorOf(S) === 'tour' ? MENTOR_SHARP : 0));
   if (S.hot0 == null) S.hot0 = (S.rng ^ 0x5bd1e995) | 0;
   if (!S.sstat) S.sstat = freshStat();
   if (S.sstat.sgR == null){ S.sstat.sgR = 0; for (const k of SGA.concat('tot')) S.sstat[k] = 0; }
@@ -1772,11 +1975,16 @@ function migrate(S){
   // spelkaraktären: första segern och högsta nivån styr vilka outfits som finns (rekordboken är ifylld här ovanför)
   if (S.rec && S.rec.w > 0) S.flags.won = true; if (S.flags.maxTier == null) S.flags.maxTier = S.tier;
   if (!S.album) S.album = [];   // segrar före albumet går inte att återskapa, eftersom kläderna inte sparades då
+  // Sparfil mitt i en tävling från före rundor och kutt (2026-11-15): T saknar antal rundor. Utan det tog tävlingen aldrig slut.
+  // Den spelas klart med två rundor utan kutt. Har sparfilen redan spelat förbi andra rundan räknas de två första och tävlingen avslutas.
+  if (S.T && S.T.rounds == null){ const T = S.T; T.rounds = 2; T.cutAfter = 0;
+    if (T.stage !== 'done' && T.you && T.you.length >= 2){ if (T.r > 1){ T.holes = null; T.feed = []; }   // scorekortet och slagen hör till en runda som inte räknas
+      T.you.length = 2; if (T.stats) T.stats.length = 2; T.r = 1; S.phase = 'tour'; finishTournament(S); } }
   return S;
 }
-const API = {LOOK_N, OUTFIT, GEAR, GEAR_KEYS, GEAR_MAX, GEAR_PRICE, freshGear, freshLook, gearLv, gearBonus, gearEnergy, ROUNDS, CUT_AFTER, CUT_N, PREP_MISS, prepGain, applyCut, prepKey, gearPrice, gearOffer, gearStr, KIT, fmean, canBuyGear, buyGear, outfitState, buyOutfit, wearOutfit, setLook, maxTier, modSum, modMul, hasMod, settleBets, applyDelayed, rollEvent, setEvent, EV_CD, freshRec, MILE, checkMiles, nextMile, careerSG, areaKeys, tourSG, MARK, PUTTOPT, momMarks, puttFrom, LUCK, courseLuck, SGA, optAreas, sgTenths, roundSG, seasonSG, puttLuck, PUTT_SHORT, PUTT_LONG, TPAR, momVar, sideTxt, freshStat, rivalFocus, roundStats, peek, shotWhy, RUSTY_AT, SHARP_PASS, SHARP_MAX, SHARP_MIN, RUST_1, TECH_BUILD, PLAY_BUILD, TIER_GROW, HOT_MULT, hotStat, isPlay, passKey, weekendSharp, REPEAT, freshSharp, sharpOf, effSt, nthOf, RIVAL, rival, rivalNote, eventView, pickEvent, tip, migrate, EVENTS, campCost, canCamp, CAMP_MULT, RELEGATE, coachCost, coachMult, relD, evOf, KEY_EV, SK, ALL, STAT, TIER, COURSE, COACH, BG, PERK, TPL, WEEKS, PROMOTE, TRAIN_E, WORK_E, WORK_KR, PREP_E, PREP_FORM,
+const API = {MENTOR, MENTOR_SHARP, MENTOR_AT, mentorOf, mentorShort, mentorTitle, hotMult, mentorCourse, DROP_AT, dropOpts, isPenalty, dropView, playDrop, LOOK_N, OUTFIT, GEAR, GEAR_KEYS, GEAR_MAX, GEAR_PRICE, freshGear, freshLook, gearLv, gearBonus, gearEnergy, ROUNDS, CUT_AFTER, CUT_N, PREP_MISS, prepGain, applyCut, prepKey, gearPrice, gearOffer, gearStr, KIT, fmean, canBuyGear, buyGear, outfitState, buyOutfit, wearOutfit, setLook, maxTier, modSum, modMul, hasMod, settleBets, applyDelayed, rollEvent, setEvent, EV_CD, freshRec, MILE, checkMiles, nextMile, careerSG, areaKeys, tourSG, MARK, PUTTOPT, momMarks, puttFrom, LUCK, courseLuck, SGA, optAreas, sgTenths, roundSG, seasonSG, puttLuck, PUTT_SHORT, PUTT_LONG, TPAR, momVar, sideTxt, freshStat, rivalFocus, roundStats, peek, shotWhy, RUSTY_AT, SHARP_PASS, SHARP_MAX, SHARP_MIN, RUST_1, TECH_BUILD, PLAY_BUILD, TIER_GROW, HOT_MULT, hotStat, isPlay, passKey, weekendSharp, REPEAT, freshSharp, sharpOf, effSt, nthOf, RIVAL, rival, rivalNote, eventView, pickEvent, tip, migrate, EVENTS, campCost, canCamp, CAMP_MULT, RELEGATE, coachCost, coachMult, relD, evOf, KEY_EV, SK, ALL, STAT, TIER, COURSE, COACH, BG, PERK, TPL, WEEKS, PROMOTE, TRAIN_E, WORK_E, WORK_KR, PREP_E, PREP_FORM,
   newCareer, courseRating, expRound, regen, tourThisWeek, fee, weeklyCost, canEnter, slotCount, restGain, trainGain, injuryRisk, preview, runWeek, endWeek,
-  strength, standing, pressure, optProb, momentView, choose, beginRound, leaderboard, standings, nextSeason, has, clamp};
+  strength, standing, pressure, optProb, momentView, choose, beginRound, leaderboard, standings, race, liveRace, PTS, nextSeason, has, clamp};
 if (typeof module !== 'undefined') module.exports = API;
 
 // ===== Bilder ritade i kod (SVG) =====
@@ -1955,6 +2163,24 @@ function puttSVG(dist, putts, seed, lab, first){
 // Stannade bollen förbi flaggan, sett från där slaget slogs?
 function pastPin(id, i, ok, flip){ const s = scn(id, flip), op = s && s.opt[i]; if (!op || !s.pin) return false; const e = ok ? op.ok : op.fail; return (e[0]-s.pin[0])*(s.pin[0]-s.ball[0]) + (e[1]-s.pin[1])*(s.pin[1]-s.ball[1]) > 0; }
 function sceneEnd(id, i, ok, flip, lk){ const op = scn(id, flip).opt[i], lp = luckPt(op, lk); return {pt:lp || (ok ? op.ok : op.fail), kind:lp ? 'land' : ok ? (op.hole ? 'hole' : 'land') : (op.fx || 'land'), ok:!!ok, via:lp && lk === 'studs' ? op.fail : null, moved:!!lp}; }
+// Släppet efter vattnet (2026-11-18). A: två klubblängder från där bollen gick i vattnet, på den sida bollen kom ifrån. B: bakåt på linjen från flaggan genom A.
+// Punkterna räknas fram ur skissen (vattnets ellips, bollens väg och flaggan), så de följer spegelvändningen. Skissen är inte skalenlig: det är en karta, inga mått.
+function dropPts(id, i, flip){
+  const s = scn(id, flip); if (!s || !s.water || !s.pin) return null; const op = s.opt[i], fp = op.fail, from = (op.path && op.path.length ? op.path[op.path.length-1] : s.ball);
+  const w = s.water.slice().sort((a,b) => Math.hypot(a[0]-fp[0], a[1]-fp[1]) - Math.hypot(b[0]-fp[0], b[1]-fp[1]))[0], inW = q => Math.pow((q[0]-w[0])/(w[2]+3), 2) + Math.pow((q[1]-w[1])/(w[3]+3), 2) <= 1;
+  const L = Math.hypot(from[0]-fp[0], from[1]-fp[1]) || 1, ux = (from[0]-fp[0])/L, uy = (from[1]-fp[1])/L; let a = fp.slice();
+  for (let t=0; t<L && inW(a); t+=2) a = [fp[0] + ux*t, fp[1] + uy*t];
+  a = [clamp2(a[0] + ux*9, 12, 308), clamp2(a[1] + uy*9, 12, 168)];
+  const M = Math.hypot(a[0]-s.pin[0], a[1]-s.pin[1]) || 1, bx = (a[0]-s.pin[0])/M, by = (a[1]-s.pin[1])/M;
+  let b = [a[0] + bx*48, a[1] + by*48]; if (b[0] < 12 || b[0] > 308 || b[1] < 12 || b[1] > 168){ const k = Math.min(b[0] < 12 ? (a[0]-12)/Math.max(.01, -bx) : b[0] > 308 ? (308-a[0])/Math.max(.01, bx) : 48, b[1] < 12 ? (a[1]-12)/Math.max(.01, -by) : b[1] > 168 ? (168-a[1])/Math.max(.01, by) : 48); b = [a[0] + bx*Math.max(24, k), a[1] + by*Math.max(24, k)]; }
+  return [a.map(n1), b.map(n1)];
+}
+function dropSVG(id, i, flip, show){
+  const P = dropPts(id, i, flip); if (!P) return '';
+  const s = scn(id, flip); let h = Pa('M' + s.pin.join(' ') + ' L' + P[1].join(' '), 'none', ' stroke="#fff" stroke-width="1.4" stroke-dasharray="1.5 4.5" stroke-linecap="round" opacity=".85"');
+  show.forEach(j => { const q = P[j]; h += Ci(q[0], q[1], 8.5, LCOL[j], STK2) + '<text x="' + q[0] + '" y="' + n1(q[1]+3.8) + '" text-anchor="middle" font-family="Hanken Grotesk,system-ui,sans-serif" font-weight="700" font-size="10.5" fill="#15251B">' + 'AB'[j] + '</text>'; });
+  return '<g class="drops">' + h + '</g>';
+}
 // o.flip: spegelvänd skiss. o.lines: rita alternativen. o.pick: rita bara det valda. o.end: {pt, kind, ok, lab} när slaget är slaget. Då ritas bollens verkliga väg, och lab (till exempel "15 m") skrivs vid en mätlinje till flaggan.
 function sceneSVG(id, o){
   o = o || {}; const s = scn(id, o.flip); if (!s) return '';
@@ -1994,6 +2220,7 @@ function sceneSVG(id, o){
         + Pa('M' + ah(.5) + ' L' + n1(ex) + ' ' + n1(ey) + ' L' + ah(-.5),'none',' stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"'); }
   });
   if (o.end && o.end.lab && o.end.kind !== 'hole' && s.pin){ const m = measure(o.end.pt, s.pin, o.end.lab); b += '<g class="msr">' + Pa('M' + o.end.pt.join(' ') + ' L' + s.pin.join(' '),'none',' stroke="#fff" stroke-width="1.3" stroke-linecap="round"') + pill(m[0], m[1], o.end.lab) + '</g>'; }
+  if (o.drops && o.pick != null) b += dropSVG(id, o.pick, o.flip, o.drops);
   if (o.marks && !o.end && o.pick == null) b += '<g class="mk">' + o.marks.map(k => markSVG(s, k)).join('') + '</g>';
   if (o.lines !== false && o.pick == null) s.opt.forEach((op,i) => {
     const a = s.ball, e = (op.path || [op.ok])[0], len = Math.hypot(e[0]-a[0], e[1]-a[1]), one = !(op.path && op.path.length), roll = one && op.roll;
@@ -2083,9 +2310,9 @@ const EVART = {sponsorday:'money', swing:'range', wrist:'health', proam:'bag', d
   sponsordeal:'handshake', shopdeal:'till', lessons:'kids', backer:'handshake', fundraiser:'jar', putter:'putter', irons:'irons', wedges:'irons', balldeal:'ball', equipdeal:'irons', lostbag:'suitcase',
   wrist2:'health', back:'health', cold:'sick', overtrain:'battery', physio:'gym', swingdoubt:'range', yips:'putter', keys:'key', caddiedeal:'handshake', roadtrip:'car', bonus:'money', sidebet:'bag', promise:'contract',
   wildcard:'pin', natcamp:'range', nerves:'bed', mentor:'book', helpback:'book', roommate:'house', holeinone:'ace', integrity:'scorecard', social:'phone', agentgig:'plane', clubchamp:'trophy', trip:'cabin',
-  room:'house', speed:'gym', grip:'grip', bossebet:'pin', extra:'pin'};
+  room:'house', speed:'gym', grip:'grip', bossebet:'pin', extra:'pin', majorq:'trophy', jetlag:'plane', homecrowd:'crowd', worldone:'camera', bossevisit:'range', coachpick:'talk'};
 const EVBG = {money:'#F6DC86', range:'#B9E29A', health:'#F3C9BE', bag:'#CBE6AE', driver:'#CBE6AE', weather:'#B9CEDA', till:'#F0E3BC', mind:'#CFE5DD', news:'#E6E2D4', rings:'#F5D5DD', gym:'#DDD5EC', car:'#D3DCC6', talk:'#D5E1F0', contract:'#EFE6CC', pin:'#BFE0C9', house:'#EAD9C4', grip:'#D9E4C8',
-  putter:'#BFE0C9', ball:'#D5E1F0', irons:'#D9E4C8', suitcase:'#D3DCC6', bed:'#C9D2EC', sick:'#F3C9BE', phone:'#D5E1F0', handshake:'#EFE6CC', kids:'#B9E29A', key:'#EAD9C4', trophy:'#F6DC86', scorecard:'#EFE6CC', cabin:'#BFDDF0', plane:'#BFDDF0', cake:'#F5D5DD', battery:'#E6E2D4', ace:'#BFE0C9', jar:'#F6DC86', book:'#CBE6AE'};
+  putter:'#BFE0C9', ball:'#D5E1F0', irons:'#D9E4C8', suitcase:'#D3DCC6', bed:'#C9D2EC', sick:'#F3C9BE', phone:'#D5E1F0', handshake:'#EFE6CC', kids:'#B9E29A', key:'#EAD9C4', trophy:'#F6DC86', scorecard:'#EFE6CC', cabin:'#BFDDF0', plane:'#BFDDF0', cake:'#F5D5DD', crowd:'#BFDDF0', camera:'#D5E1F0', battery:'#E6E2D4', ace:'#BFE0C9', jar:'#F6DC86', book:'#CBE6AE'};
 function eventArt(id, v){
   let k = EVART[id] || 'talk'; if (Array.isArray(k)) k = k[(v || 0) % k.length];
   const r = aprng(ahash('ev' + id)); let b = Re(0,0,320,96,EVBG[k]);
@@ -2126,6 +2353,10 @@ function eventArt(id, v){
   else if (k === 'sick') g = Pa('M-34 -16 q-6 -8 0 -15 M-22 -16 q-6 -8 0 -15 M-10 -16 q-6 -8 0 -15','none',' stroke="#8A948A" stroke-width="2.5" stroke-linecap="round"') + Pa('M-46 -6 h48 v18 a16 16 0 0 1 -16 16 h-16 a16 16 0 0 1 -16 -16 z','#FBF9F1',STK) + Pa('M2 0 h6 a9 9 0 0 1 0 18 h-7','none',STK)
     + Pa('M-46 2 h48','none',' stroke="' + C.sandE + '" stroke-width="5"') + El(-22,34,34,4,'#E6E2D4',STK2)
     + '<g transform="translate(50 4) rotate(35)">' + Re(-5,-36,10,52,'#fff',' rx="5"' + STK) + Re(-1.6,-16,3.2,32,C.pen) + Ci(0,20,9,C.pen,STK) + Pa('M5 -26 h5 M5 -18 h5 M5 -10 h5','none',STK2) + '</g>';
+  else if (k === 'camera') g = Pa('M-12 14 L-34 42 M-4 14 V42 M4 14 L26 42','none',' stroke="#8A948A" stroke-width="3.5" stroke-linecap="round"') + Re(-24,8,32,8,'#3A4A3F',' rx="2"')
+    + Re(-40,-30,64,40,C.ink,' rx="6"') + Re(-34,-22,24,12,'#3A4A3F',' rx="2"') + Re(-30,-42,26,12,'#3A4A3F',' rx="3"') + Ci(-30,2,3.5,C.pen) + Re(24,-24,14,28,'#3A4A3F',' rx="2"' + STK2) + Ci(46,-10,14,'#2B3A30',STK) + Ci(46,-10,7,C.water) + Ci(43,-13,2.2,'#fff',' opacity=".8"')
+    + Ci(-80,-14,17,C.flag,STK) + '<text x="-80" y="-7.5" text-anchor="middle" font-family="Big Shoulders Display,Hanken Grotesk,system-ui,sans-serif" font-weight="800" font-size="21" fill="#15251B">1</text>'
+    + [[86,-26],[100,-6],[84,16],[-100,24],[-62,30]].map((p,i) => Ci(p[0],p[1],6,['#E5B890','#C98E64','#F1CFAE','#8D5A3B','#E5B890'][i],STK2) + Pa('M' + (p[0]-8) + ' ' + (p[1]+16) + ' q8 -10 16 0 z',[C.pen,C.fair,C.water,C.flag,'#fff'][i],STK2)).join('');
   else if (k === 'phone') g = '<g transform="rotate(-8)">' + Re(-25,-41,50,82,C.ink,' rx="9"') + Re(-20,-33,40,64,'#DDF0FB',' rx="3"') + Re(-14,-27,28,24,C.fair,STK2) + Pa('M-10 -8 l8 -9 l6 6 l4 -4 l6 7','none',STK2) + Pa('M-14 5 h28 M-14 12 h18','none',' stroke="#8A948A" stroke-width="2" stroke-linecap="round"') + Ci(0,36,2.6,'#DDF0FB') + '</g>'
     + Ci(50,-18,16,C.pen,STK) + Pa('M50 -10 l-8 -8 a5 5 0 0 1 8 -6 a5 5 0 0 1 8 6 z','#fff') + Ci(-54,-8,11,C.flag,STK2) + Pa('M-54 -13 v10 M-59 -8 h10','none',STK) + Ci(58,20,8,C.water,STK2);
   else if (k === 'handshake') g = Pa('M-90 -14 h34 l10 6 v18 l-10 8 h-34 z', C.ink, STK) + Pa('M90 -14 h-34 l-10 6 v18 l10 8 h34 z', C.flag, STK)
@@ -2137,6 +2368,11 @@ function eventArt(id, v){
     + Pa('M40 -36 h24 a9 9 0 1 1 -9 16 l-15 -7 z', C.flag, STK) + Ci(62,-25,3.2,C.ink) + Pa('M40 -34 q-14 -8 -22 4','none',STK2);
   else if (k === 'key') g = Ci(-42,-2,17,'none',' stroke="#15251B" stroke-width="11"') + Ci(-42,-2,17,'none',' stroke="#F0BC1E" stroke-width="6.5"') + Re(-25,-7,74,10,C.flag,' rx="2"' + STK) + Pa('M26 3 v13 h8 v-7 h6 v7 h8 v-13 z', C.flag, STK)
     + Pa('M-42 15 q-4 10 4 16','none',STK2) + '<g transform="translate(-30 40) rotate(-14)">' + Re(-11,-12,22,26,'#FBF9F1',' rx="3"' + STK2) + Pa('M-3 8 V-6','none',STK2) + Pa('M-3 -6 l9 3 l-9 3 z', C.pen, STK2) + '</g>';
+  else if (k === 'crowd'){ const sk = ['#E5B890','#C98E64','#8D5A3B','#F1CFAE'], sh = [C.pen, C.fair, C.flag, C.water, '#fff', C.tree2], flagSE = (x, y, r) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + Pa('M0 0 V30','none',' stroke="#8A948A" stroke-width="2.5" stroke-linecap="round"') + Re(0,0,24,15,'#2E6DB4',STK2) + Re(7,0,4,15,'#F0BC1E') + Re(0,5.5,24,4,'#F0BC1E') + Re(0,0,24,15,'none',STK2) + '</g>';
+    for (let i=0;i<7;i++){ const x = -66 + i*22; g += Pa('M' + (x-11) + ' 10 q11 -20 22 0 z', sh[i % sh.length], STK2) + Ci(x,-6,7.5,sk[i % 4],STK2); }
+    g += flagSE(-46,-38,-10) + flagSE(30,-40,8);
+    for (let i=0;i<6;i++){ const x = -55 + i*22; g += Pa('M' + (x-12) + ' 34 q12 -22 24 0 z', sh[(i+3) % sh.length], STK2) + Ci(x,15,8.5,sk[(i+1) % 4],STK2); }
+    g += Pa('M-84 30 q42 9 84 0 q42 9 84 0','none',' stroke="' + C.flag + '" stroke-width="3"') + [-84,0,84].map(x => Re(x-2.5,26,5,14,C.ink,' rx="1.5"')).join(''); }
   else if (k === 'trophy') g = Pa('M-22 -28 h-12 a9 9 0 0 0 12 17 M22 -28 h12 a9 9 0 0 1 -12 17','none',STK) + Pa('M-24 -36 h48 v14 a24 24 0 0 1 -48 0 z', C.flag, STK) + Pa('M-13 -29 v11','none',' stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"')
     + Re(-5,2,10,14,'#D9A514',STK2) + Re(-20,16,40,11,C.ink,' rx="2"') + Re(-11,19,22,5,C.flag) + [[-62,-26,20],[-70,8,-30],[60,-30,40],[70,6,-15],[-50,30,10],[52,30,60]].map((c,i) => '<rect x="-3.5" y="-1.8" width="7" height="3.6" fill="' + [C.pen,C.water,C.rough][i%3] + '" transform="translate(' + c[0] + ' ' + c[1] + ') rotate(' + c[2] + ')"/>').join('');
   else if (k === 'scorecard') g = '<g transform="rotate(-6)">' + Re(-60,-32,100,64,'#FDFBF4',' rx="3"' + STK) + Re(-60,-32,100,13,C.rough) + Pa('M-60 -19 h100','none',STK2)
@@ -2494,11 +2730,11 @@ function shotBox(f, tplId){
     : f.p <= .4 ? 'Svårt slag. Du klarar det bara ' + ten + '. Läget kräver ' + dec(w.need, 0) + ' i ' + lista(w.ks) + ' för jämna odds, och du har ' + dec(w.have, 0) + '.'
     : 'Jämnt läge som gick emot dig. Du klarar det ' + ten + '.';
   const mods = w.mods.slice(0, 2).map(m => MODTXT[m]).join(' ');
-  const dist = f.lie === 'hal' ? '0' : f.dist == null ? '–' : meters(f.dist);
-  return '<div class="strip three shot"><div class="cell"><div class="lab">Till flaggan</div><div class="val">' + dist + (f.dist != null || f.lie === 'hal' ? '<small>m</small>' : '') + '</div></div>'
+  const dist = f.lie === 'hal' ? '0' : f.dist == null ? '–' : meters(f.dist), pen = penalty(f, tplId);
+  return '<div class="strip three shot"><div class="cell' + (pen ? ' pen' : '') + '"><div class="lab">' + (pen ? 'Plikt' : 'Till flaggan') + '</div><div class="val">' + (pen ? '+1<small>slag</small>' : dist + (f.dist != null || f.lie === 'hal' ? '<small>m</small>' : '')) + '</div></div>'
     + '<div class="cell"><div class="lab">Läge</div><div class="val lie">' + (LIE[f.lie] || '–') + '</div></div>'
     + '<div class="cell"><div class="lab">Din chans</div><div class="val">' + Math.round(f.p*20)*5 + '<small>%</small></div></div></div>'
-    + '<div class="verdict ' + (f.ok ? 'good' : 'bad') + '"><div class="lab">Varför gick det så?</div><p>' + a + (mods ? ' ' + mods : '') + '</p>' + (f.luck ? '<p><b>' + (f.lk ? LUCKTXT[f.lk] || '' : f.luck < 0 ? (f.ok ? 'Tur på green: en så lång putt går sällan i.' : 'Men putten räddade dig: en så lång putt går sällan i.') : (f.ok ? 'Men putten kostade dig: en så kort putt brukar gå i.' : 'Otur på green också: en så kort putt brukar gå i.')) + '</b></p>' : '') + '</div>' + sgArea(f);
+    + '<div class="verdict ' + (f.ok ? (f.luck > 0 ? 'mixed' : 'good') : (f.luck < 0 ? 'mixed' : 'bad')) + '"><div class="lab">Varför gick det så?</div><p>' + a + (mods ? ' ' + mods : '') + '</p>' + (f.luck ? '<p><b>' + (f.lk ? LUCKTXT[f.lk] || '' : f.luck < 0 ? (f.ok ? 'Tur på green: en så lång putt går sällan i.' : 'Men putten räddade dig: en så lång putt går sällan i.') : (f.ok ? 'Men putten kostade dig: en så kort putt brukar gå i.' : 'Otur på green också: en så kort putt brukar gå i.')) + '</b></p>' : '') + '</div>' + sgArea(f);
 }
 // Vilken del av spelet slaget räknas till i slag mot fältet. Gränserna står vid optAreas i logic.js.
 function sgArea(f){
@@ -2506,7 +2742,7 @@ function sgArea(f){
   return '<p class="muted sga">Räknas i slag mot fältet under <b>' + f.ar.map(k => SGN[k]).join(' och ') + '</b>.' + (f.luck && !f.lk && f.ar.indexOf('put') < 0 ? ' ' + (f.luck < 0 ? 'Turen' : 'Oturen') + ' på green räknas under ' + SGN.put + '.' : '') + '</p>';
 }
 // Vad som återstod efter slaget. På green ritas puttarna i närbild, annars står det hur många slag det blev till.
-const NUM = ['', 'Ett', 'Två', 'Tre', 'Fyra', 'Fem', 'Sex', 'Sju', 'Åtta', 'Nio', 'Tio'], WHERE = {ruff:'från ruffen', bunker:'från bunkern', fairway:'från fairway'};
+const NUM = ['', 'Ett', 'Två', 'Tre', 'Fyra', 'Fem', 'Sex', 'Sju', 'Åtta', 'Nio', 'Tio'], WHERE = {ruff:'från ruffen', bunker:'från bunkern', fairway:'från fairway', traden:'från träden', skog:'ur skogen'};
 const puttsOf = f => f && f.lie === 'green' && f.dist != null && f.left >= 1 && f.left <= 3 ? f.left : 0;
 // När själva nyckelslaget var en putt (f.pf: meter före slaget) ritas den putten i närbilden, följd av dem som återstod.
 const mark = m => (Number.isInteger(m) ? m : dec(m, 1)) + ' m';
@@ -2516,11 +2752,23 @@ function afterShot(f, v){
   const kp = keyPutt(f);
   if (kp){ const from = mark(f.pf), pic = '<div class="scene putt">' + puttSVG(f.pf, kp, f.hole + 'k' + Math.round(f.pf*10), from, kp > 1 ? {m:f.dist, past:!!v && pastPin(v.tpl, v.opt, v.ok, v.flip)} : null) + '</div>';
     return pic + '<p class="left"><b>' + (kp === 1 ? 'Putten från ' + from + ' går i:' : 'Putten från ' + from + ' stannar ' + meters(f.dist) + ' m från hålet. ' + (kp === 2 ? 'En putt' : 'Två puttar') + ' till:') + '</b> ' + OUT[f.d] + '.' + luckTag(f) + '</p>'; }
+  if (f && f.lie === 'vatten') return waterLine(f, v && v.tpl);
+  if (f && f.dist == null && WHERE[f.lie] && f.left >= 1 && f.left <= 5) return '<p class="left"><b>' + NUM[f.left] + ' slag till ' + WHERE[f.lie] + ':</b> ' + OUT[f.d] + '.' + luckTag(f) + '</p>';
   if (!f || f.left == null || f.left < 1 || f.left > 5 || f.dist == null) return '';
   const n = puttsOf(f), m = meters(f.dist) + ' m';
   if (n) return '<div class="scene putt">' + puttSVG(f.dist, n, f.hole + 'r' + Math.round(f.dist*10), m) + '</div><p class="left"><b>' + (n === 1 ? 'En putt' : NUM[n] + ' puttar') + ' från ' + m + ':</b> ' + OUT[f.d] + '.' + luckTag(f) + '</p>';
   if (WHERE[f.lie]) return '<p class="left"><b>' + NUM[f.left] + ' slag till ' + WHERE[f.lie] + ':</b> ' + OUT[f.d] + '.' + luckTag(f) + '</p>';
   return '';
+}
+// Bollen i vattnet (2026-11-17 kväll): ett pliktslag och sedan slagen som återstår. I vattenkanten (edge) ligger bollen kvar och kan slås igen, så där står ingen plikt.
+const penalty = (f, tpl) => !!f && f.lie === 'vatten' && tpl !== 'edge' && f.left != null && f.left >= 2;
+function waterLine(f, tpl){
+  if (!f || f.lie !== 'vatten' || f.left == null || f.left < 1 || f.left > 6) return '';
+  // Släppet (2026-11-18): före valet står bara plikten; efter valet var bollen släpptes och slagen som återstod.
+  if (penalty(f, tpl) && S.T && S.T.drop && S.T.feed[S.T.drop.fi] === f) return '<p class="left"><b>Plikt, ett slag.</b></p>';
+  if (penalty(f, tpl) && f.drop) return '<p class="left"><b>Plikt, ett slag. Från släppet, ' + f.drop.m + ' m: ' + NUM[f.left-1].toLowerCase() + ' slag till:</b> ' + OUT[f.d] + '.' + luckTag(f) + '</p>';
+  if (penalty(f, tpl)) return '<p class="left"><b>Plikt, ett slag. Sedan ' + NUM[f.left-1].toLowerCase() + ' slag till:</b> ' + OUT[f.d] + '.' + luckTag(f) + '</p>';
+  return tpl !== 'edge' ? '' : '<p class="left"><b>' + NUM[f.left] + ' slag till från vattenkanten:</b> ' + OUT[f.d] + '.' + luckTag(f) + '</p>';
 }
 // Tur och otur på green: en längre putt som går i, eller en kort som missar.
 const luckTxt = f => !f || !f.luck || f.lk || f.dist == null ? '' : f.luck < 0 ? ' Sedan går putten från ' + meters(f.dist) + ' m i.' : ' Sedan missar du putten från ' + meters(f.dist) + ' m.';
@@ -2566,7 +2814,8 @@ const meArt = (fit) => ({look:S.look, outfit:OUTFIT[fit || S.outfit] || OUTFIT.k
 const wetNow = () => !!(S.T && S.wk && S.wk.wx === 'rain');
 const meTour = () => { const m = meArt(); if (!wetNow()) return m; const o = S.wardrobe.indexOf('regn') >= 0 || S.outfit === 'regn' ? OUTFIT.regn : Object.assign({}, m.outfit, {jacket:true, vest:null, shorts:false}); return {look:Object.assign({}, m.look, {hat:3}), outfit:Object.assign({}, o, {flat:false}), bag:m.bag}; };
 // Klubban för slaget, till tv-rutan i hålskissen: vilken del av bagen läget hör till.
-const TPLCLUB = {drive:'driver', tight:'driver', dogleg:'driver', par5tee:'driver', crest:'driver', par5:'wood', long3:'wood', lag:'putter', sideputt:'putter', flag:'wedge', short:'wedge', wedge:'wedge', rough:'wedge', gsb:'wedge', bump:'wedge', fringe:'wedge', water3:'wedge'};
+const TPLCLUB = {drive:'driver', tight:'driver', dogleg:'driver', par5tee:'driver', crest:'driver', par5:'wood', long3:'wood', lag:'putter', sideputt:'putter', flag:'wedge', short:'wedge', wedge:'wedge', rough:'wedge', gsb:'wedge', bump:'wedge', fringe:'wedge', water3:'wedge',
+  tier:'putter', lip:'wedge', edge:'wedge', head:'driver'};   // 2026-11-15 kväll: de här fyra saknades, så tv-rutan visade ett järn vid platåputten, i bunkern, i vattenkanten och på tee
 const CLUBLAB = {driver:'DRIVER', wood:'TRÄ 3', iron:'JÄRN', wedge:'WEDGE', putter:'PUTTER'};
 const tvFor = tpl => { const club = TPLCLUB[tpl] || 'iron'; return {me:meTour(), club, label:CLUBLAB[club]}; };
 const reactPose = d => d < 0 ? 'cheer' : d === 0 ? 'stand' : d === 1 ? 'slump' : 'facepalm';
@@ -2664,7 +2913,7 @@ function header(sub){
 }
 function strip(){
   const rank = S.hist.length ? ord(standings(S).find(r => r.id === 'you').rank) : '–';
-  return '<section class="strip" aria-label="Läget just nu">'
+  return '<section class="strip now" aria-label="Läget just nu">'
     + '<div class="cell' + (S.energy < 35 ? ' low' : '') + '"><div class="lab">Energi</div><div class="val">' + Math.round(S.energy) + '</div></div>'
     + '<div class="cell"><div class="lab">Form</div><div class="val">' + sign(S.form, 0) + '</div></div>'
     + '<div class="cell' + (S.money < 0 ? ' low' : '') + '"><div class="lab">Kassa</div><div class="val">' + nf.format(Math.round(S.money)).replace('-', '−') + '<small>kr</small></div></div>'
@@ -2679,15 +2928,19 @@ function statRows(noSharp){
       + '<span class="sv">' + dec(v) + '</span><span class="sd ' + (d > .05 ? 'up' : d < -.05 ? 'down' : '') + '">' + (Math.abs(d) < .05 ? '' : sign(d)) + '</span></div>';
   }).join('');
 }
-function lbTable(rows, key, fmt, stag){
+// lines (2026-11-16): strecken i säsongens tabell. up är antalet platser som går upp, down den sista säkra platsen. Strecket för nedflyttning ritas bara när en rad under det visas.
+function lbTable(rows, key, fmt, stag, lines){
   const yi = rows.findIndex(r => r.id === 'you'), show = new Set([0,1,2,3,4, yi-1, yi, yi+1].filter(i => i >= 0 && i < rows.length));
-  let html = '<table class="lb' + (stag ? ' stag' : '') + '"><tbody>', last = -1; let cutDone = false;
+  let html = '<table class="lb' + (stag ? ' stag' : '') + '"><tbody>', last = -1; let cutDone = false, upDone = !(lines && lines.up), downDone = !(lines && lines.down);
   [...show].sort((a,b) => a-b).forEach(i => {
-    if (i > last+1) html += '<tr class="gap"><td colspan="3"></td></tr>';
+    if (!upDone && i >= lines.up){ upDone = true; html += '<tr class="cutrow up"><td colspan="3">▲ Uppflyttning</td></tr>'; }
+    else if (i > last+1) html += '<tr class="gap"><td colspan="3"></td></tr>';
+    if (!downDone && i >= lines.down){ downDone = true; html += '<tr class="cutrow dn"><td colspan="3">▼ Nedflyttning</td></tr>'; }
     const r = rows[i]; last = i;
     if (r.out && !cutDone){ cutDone = true; html += '<tr class="cutrow"><td colspan="3">Kutten' + (rows.cut ? ': ' + rel(rows.cut.line) : '') + '</td></tr>'; }
     html += '<tr class="' + (r.id === 'you' ? 'you' : '') + (r.out ? ' out' : '') + '"><td>' + (r.pos || r.rank) + '</td><td><span class="nm">' + bustSVG(r.id === 'you' ? meArt() : faceOf(r.name)) + esc(r.name) + '</span></td><td>' + fmt(r[key]) + '</td></tr>';
   });
+  if (!upDone) html += '<tr class="cutrow up"><td colspan="3">▲ Uppflyttning</td></tr>';   // spelaren ligger i toppen: strecket hamnar sist
   return html + '</tbody></table>';
 }
 function fold(id, label, body){
@@ -2718,6 +2971,57 @@ function reportPanel(){
   }
   (S.news || []).forEach(n => parts.push('<p><b>Nytt:</b> ' + esc(n) + '</p>'));
   return parts.length ? '<section class="panel"><h2>Förra veckan</h2>' + parts.join('') + '</section>' : '';
+}
+
+// ---------- Säsongens mål (2026-11-16) ----------
+// Läget mot strecket ska synas, inte läsas: tabellen som 31 rutor (grönt går upp, rött åker ner, gult är du) och tre siffror under.
+const tableLines = () => ({up:S.tier < TIER.length-1 ? PROMOTE : 0, down:S.tier > 0 ? 31 - RELEGATE : 0});
+// Läget mot strecket som en bricka. Används efter tävlingen.
+// Närmare nedflyttning än uppflyttning, räknat i platser: då är marginalen ner det som gäller, inte avståndet till toppen.
+// (Räknat i poäng blev det fel högst upp: fyra i tabellen på Världstouren har långt till ettan men ännu längre ner.)
+const raceNear = rc => !!rc.down && rc.down.inn && !rc.up.inn && rc.down.n - rc.rank < rc.rank - rc.up.n;
+function raceChip(rc){
+  const up = rc.up, dn = rc.down;
+  if (dn && !dn.inn) return '<span class="chipk lost">' + dn.d + ' p under strecket</span>';
+  if (raceNear(rc)) return '<span class="chipk">' + dn.d + ' p över nedflyttning</span>';
+  if (up.klar) return '<span class="chipk beat">' + (rc.top ? 'Touren vunnen' : 'Uppflyttningen klar') + '</span>';
+  if (up.inn) return '<span class="chipk beat">' + (rc.top ? 'Etta' : 'Topp ' + up.n) + ' · +' + up.d + ' p</span>';
+  return '<span class="chipk">' + up.d + ' p till ' + (rc.top ? 'ettan' : 'topp ' + up.n) + '</span>';
+}
+// Under finalens sista runda: tabellen om tävlingen slutade som det står nu. Det är då säsongens mål avgörs.
+function liveLine(){
+  const rc = S.T.final ? liveRace(S) : null; if (!rc) return '';
+  const up = rc.up, dn = rc.down, danger = !!dn && !dn.inn;
+  const txt = danger ? dn.d + ' p under strecket.' : raceNear(rc) ? dn.d + ' p över nedflyttning.'
+    : up.inn ? (rc.top ? 'Du vinner touren med ' : 'Topp ' + up.n + ' med ') + up.d + ' p till godo.' : up.d + ' p till ' + (rc.top ? 'ettan' : 'topp ' + up.n) + '.';
+  return '<p class="tblnow' + (danger ? ' low' : up.inn ? ' in' : '') + '"><b>Tabellen just nu: ' + ord(rc.rank) + '.</b> ' + txt + '</p>';
+}
+function racePanel(){
+  const rc = race(S), up = rc.up, dn = rc.down, danger = !!dn && !dn.inn, none = !rc.played;
+  let pips = ''; for (let i=1; i<=rc.n; i++) pips += '<i class="' + (i <= up.n ? 'up' : dn && i > dn.n ? 'dn' : '') + (!none && i === rc.rank ? ' me' : '') + '"></i>';
+  const c2 = none ? ['Till ' + (rc.top ? 'ettan' : 'topp ' + up.n), '–', '']
+    : danger ? ['Under strecket', dn.d + '<small>p</small>', ' low']
+    : raceNear(rc) ? ['Över strecket', '+' + dn.d + '<small>p</small>', '']
+    : up.inn ? [rc.top ? 'Ledning' : 'Marginal', '+' + up.d + '<small>p</small>', ' hot']
+    : ['Till ' + (rc.top ? 'ettan' : 'topp ' + up.n), up.d + '<small>p</small>', ''];
+  const msg = none ? '' : danger ? '<p class="warn">' + (dn.borta ? 'Platsen går inte längre att rädda.' : 'Du åker ner om säsongen slutar så här.') + '</p>'
+    : up.klar ? '<p><b>' + (rc.top ? 'Ingen kan gå förbi dig. Touren är din.' : 'Uppflyttningen är klar.') + '</b></p>'
+    : up.borta ? '<p class="muted">' + (rc.top ? 'Ettan' : 'Topp ' + up.n) + ' går inte längre att nå i år.</p>' : '';
+  return '<section class="panel race"><h2>Säsongens mål<span class="tag">' + (rc.top ? 'Ettan vinner touren' : 'Topp ' + up.n + ' går upp') + '</span></h2>'
+    + '<div class="pips31" role="img" aria-label="Tabellen: ' + (none ? 'ingen tävling spelad' : 'plats ' + rc.rank + ' av ' + rc.n) + '">' + pips + '</div>'
+    + '<div class="pipl"><span class="up">' + (rc.top ? 'Etta' : 'Upp') + '</span>' + (dn ? '<span class="dn">Ner</span>' : '') + '</div>'
+    + '<div class="strip three"><div class="cell"><div class="lab">Plats</div><div class="val">' + (none ? '–' : rc.rank + '<small>av ' + rc.n + '</small>') + '</div></div>'
+    + '<div class="cell' + c2[2] + '"><div class="lab">' + c2[0] + '</div><div class="val">' + c2[1] + '</div></div>'
+    + '<div class="cell"><div class="lab">Kvar</div><div class="val">' + rc.left + '<small>' + (rc.left === 1 ? 'tävling' : 'tävlingar') + '</small></div></div></div>' + msg + '</section>';
+}
+// Säsongens tävlingar: en rad per tävling med placering, resultat mot par, poäng och prispengar. Missad kutt visar var kutten gick.
+function toursPanel(){
+  const rows = S.sched.map((t,i) => { if (!t) return ''; const w = i+1, h = S.hist.find(x => x.week === w), name = '<b>' + esc(COURSE[t.c].name) + '</b>' + (t.final ? ' <span class="tag">Final</span>' : '');
+    if (h){ const d = h.missed ? [h.tot != null ? rel(h.tot) + ' efter två rundor' : '', h.cut != null ? 'kutten ' + rel(h.cut) : ''] : [h.tot != null ? rel(h.tot) : '', h.pts + ' p', h.prize ? kr(h.prize) : ''];
+      return '<div class="tw"><span>V' + w + '</span><span>' + name + '<small>' + d.filter(x => x).join(' · ') + '</small></span><span class="tp' + (h.missed ? ' miss' : h.pos <= 3 ? ' top' : '') + '">' + (h.missed ? 'Kutt' : ord(h.pos)) + '</span></div>'; }
+    if (w < S.week) return '<div class="tw off"><span>V' + w + '</span><span>' + name + '<small>Du spelade inte</small></span><span class="tp">–</span></div>';
+    return '<div class="tw next' + (w === S.week ? ' now' : '') + '"><span>V' + w + '</span><span>' + name + '</span><span class="tp"></span></div>'; }).join('');
+  return '<section class="panel"><h2>Säsongens tävlingar<span>' + S.hist.length + ' spelade</span></h2><div class="tours">' + rows + '</div></section>';
 }
 
 // ---------- Säsongsbanan ----------
@@ -2782,7 +3086,8 @@ function viewHub(){
 
   let tour, mine = 0, fieldAvg = 0;
   if (t){
-    const c = COURSE[t.c], keep = S.sharp; S.sharp = pv.sharp; mine = strength(S, t.c) + (!S.injury && canEnter(S) ? (ui.plan.indexOf('prep') >= 0 ? prepGain(S) : -PREP_MISS[S.tier])*.5 : 0); S.sharp = keep;   // formen från att spela in banan, eller tappet från att låta bli, räknas in fieldAvg = S.field.reduce((a,o) => a + o.rating + o.aff[t.c], 0)/S.field.length;
+    const c = COURSE[t.c], keep = S.sharp; S.sharp = pv.sharp; mine = strength(S, t.c) + (!S.injury && canEnter(S) ? (ui.plan.indexOf('prep') >= 0 ? prepGain(S) : -PREP_MISS[S.tier])*.5 : 0); S.sharp = keep;   // formen från att spela in banan, eller tappet från att låta bli, räknas in
+    fieldAvg = S.field.reduce((a,o) => a + o.rating + o.aff[t.c], 0)/S.field.length;   // egen rad: 2026-11-15 hamnade den efter kommentaren ovan och rutan visade Fältet 0
     tour = '<section class="panel"><div class="arthead">' + bannerSVG(t.c) + '</div><h2>Veckans tävling' + (t.final ? '<span class="tag">Final: dubbla poäng</span>' : CUT_AFTER[S.tier] ? '<span class="tag">' + ROUNDS[S.tier] + ' rundor, kutt efter ' + CUT_AFTER[S.tier] + '</span>' : '') + '</h2><h3>' + c.name + '</h3>'
       + '<div class="chips">' + c.top.map(k => '<span class="chip">' + STAT[k].n + ' ' + dec(S.st[k], 0) + (pv.sharp[k] ? ' <span class="shp ' + (pv.sharp[k] > 0 ? 'up' : pv.sharp[k] <= RUSTY_AT ? 'down' : '') + '">' + sign(pv.sharp[k], 0) + '</span>' : '') + '</span>').join('') + '</div>'
       + '<div class="strip three"><div class="cell' + (mine < fieldAvg - .5 ? ' low' : '') + '"><div class="lab">Din styrka</div><div class="val">' + dec(mine, 0) + '</div></div><div class="cell"><div class="lab">Fältet</div><div class="val">' + dec(fieldAvg, 0) + '</div></div><div class="cell"><div class="lab">Avgift</div><div class="val">' + kr(fee(S)) + '</div></div></div>'
@@ -2810,7 +3115,7 @@ function viewHub(){
   // Två kort: vad banan kräver, med röd prick på det som blir ringrostigt, och vad Bosse hjälper till med den här veckan.
   const hot = hotStat(S), chip = k => '<span class="chipk">' + (now && pv.sharp[k] <= RUSTY_AT ? '<i class="dot"></i>' : '') + STAT[k].n + '</span>';
   const why = '<div class="planinfo"><div class="pi why"><span class="lab">' + FLAGI + (nextT ? (now ? 'Helgens bana kräver' : 'Nästa bana kräver (v. ' + nextT.w + ')') : 'Säsongen är spelad') + '</span>' + keys.map(chip).join('') + '</div>'
-    + (hot ? '<div class="pi why hot"><span class="lab">Bosse hjälper dig med</span><span class="chipk">' + STAT[hot].n + '</span><b class="hotpct">+' + Math.round((HOT_MULT-1)*100) + ' %</b></div>' : '') + '</div>';
+    + (hot ? '<div class="pi why hot"><span class="lab">' + mentorShort(S) + ' hjälper dig med</span><span class="chipk">' + STAT[hot].n + '</span><b class="hotpct">' + (mentorOf(S) === 'tour' ? '+' + MENTOR_SHARP + ' i helgen' : '+' + Math.round((HOT_MULT-1)*100) + ' %') + '</b></div>' : '') + '</div>';
   // Två ord för två saker (Simon 2026-11-14: "fattar inte alls den skillnaden"): "för alltid" är det passet bygger, "i helgen" är skärpan.
   // Orden bygger, skärpa och ringrostigt står inte på den här skärmen. Lägesväljaren visar skillnaden som två staplar, och raden under korten visar summan: för alltid, styrka i helgen mot fältets, energi kvar.
   // Två lägen: teknik bygger, spelträning ger skärpa i helgen. Läget väljs med en knapp ovanför passen och gäller tills man byter.
@@ -2824,7 +3129,7 @@ function viewHub(){
   const acts = ALL.map(k => { const cnt = pv.cnt[k] || 0, key = keys.indexOf(k) >= 0, play = mode === 's' && k !== 'fys', a = play ? 's:' + k : k;
     // Knappen visar vad just det här passet ger: bygget och skärpan i helgen. Röd prick: blir ringrostigt om det lämnas orört.
     const after = k === 'fys' ? 0 : preview(S, ui.plan.concat([a])).sharp[k], rust = k !== 'fys' && pv.sharp[k] <= RUSTY_AT, lost = play && !now && after > 0;
-    return '<button class="act' + (COACH[S.coach].keys.indexOf(k) >= 0 ? ' boost' : '') + (key ? ' key' : '') + (k === hot ? ' hotk' : '') + '" type="button" data-a="add" data-k="' + a + '"' + (full || inj ? ' disabled' : '') + ' aria-label="' + STAT[k].n + (k === 'fys' ? '' : play ? ', spelträning' : ', teknik') + (key ? ', krävs på nästa bana' : '') + (k === hot ? ', veckans hjälp' : '') + (rust ? ', tappar i helgen om det inte tränas' : '') + (lost ? ', det som gäller i helgen går förlorat utan tävling' : '') + '"><span class="n">' + (rust ? '<i class="dot"></i>' : '') + STAT[k].n + (key ? FLAGI : '') + '</span><span class="m">' + sign(trainGain(S, k, pv.energy, cnt, play)) + (k === hot ? ' <b class="hotb">Bosse</b>' : '') + (cnt ? ' · pass ' + (cnt+1) : '') + '</span>' + (k === 'fys' ? '<span class="shp">Mer energi</span>' : lost ? '<span class="shp lost">+' + after + ' i helgen</span>' : play || after > 0 ? '<span class="shp up">+' + after + ' i helgen</span>' : '') + '</button>'; }).join('')
+    return '<button class="act' + (COACH[S.coach].keys.indexOf(k) >= 0 ? ' boost' : '') + (key ? ' key' : '') + (k === hot ? ' hotk' : '') + '" type="button" data-a="add" data-k="' + a + '"' + (full || inj ? ' disabled' : '') + ' aria-label="' + STAT[k].n + (k === 'fys' ? '' : play ? ', spelträning' : ', teknik') + (key ? ', krävs på nästa bana' : '') + (k === hot ? ', veckans hjälp' : '') + (rust ? ', tappar i helgen om det inte tränas' : '') + (lost ? ', det som gäller i helgen går förlorat utan tävling' : '') + '"><span class="n">' + (rust ? '<i class="dot"></i>' : '') + STAT[k].n + (key ? FLAGI : '') + '</span><span class="m">' + sign(trainGain(S, k, pv.energy, cnt, play)) + (k === hot ? ' <b class="hotb">' + mentorShort(S) + '</b>' : '') + (cnt ? ' · pass ' + (cnt+1) : '') + '</span>' + (k === 'fys' ? '<span class="shp">Mer energi</span>' : lost ? '<span class="shp lost">+' + after + ' i helgen</span>' : play || after > 0 ? '<span class="shp up">+' + after + ' i helgen</span>' : '') + '</button>'; }).join('')
     + '<button class="act" type="button" data-a="add" data-k="rest"' + dis + '><span class="n">Vila</span><span class="m">+' + dec(restGain(S), 0) + ' energi</span></button>'
     + '<button class="act" type="button" data-a="add" data-k="work"' + dis + '><span class="n">Jobba</span><span class="m">+' + kr(WORK_KR) + '</span></button>'
     + '<button class="act" type="button" data-a="add" data-k="prep"' + (full || inj || !enter ? ' disabled' : '') + '><span class="n">Spela in banan</span><span class="m">' + (PREP_MISS[S.tier] ? 'annars −' + PREP_MISS[S.tier] + ' form' : '+' + dec(PREP_FORM) + ' form') + '</span></button>';
@@ -2839,7 +3144,7 @@ function viewHub(){
     + '<p class="muted legend"><i class="dot"></i>tappar ' + (-RUST_1) + ' till ' + (-SHARP_MIN) + ' i helgen om du inte tränar det' + (mode === 's' && !now ? ' · överstruket går förlorat' : '') + '</p>'
     + '<details class="more"><summary>Mer om läget</summary>' + why2 + '<p class="muted">Träning kostar ' + TRAIN_E + ' energi per pass, och tomma pass blir vila. Ett andra pass på samma sak samma vecka ger mindre.</p></details></section>';
 
-  const table = lbTable(standings(S), 'pts', v => v + ' p') + '<p class="muted">Topp ' + PROMOTE + ' flyttas upp efter vecka ' + WEEKS + (S.tier > 0 ? '. De ' + RELEGATE + ' sista flyttas ner.' : '.') + '</p>';
+  const table = lbTable(standings(S), 'pts', v => v + ' p', false, tableLines());
   const coach = COACH.map((c,i) => '<button class="coach" type="button" data-a="coach" data-i="' + i + '" aria-pressed="' + (S.coach === i) + '"><span><b>' + c.name + '</b><small>' + c.txt + '</small></span><em>' + (i ? kr(tier.coach) + '/v' : 'Gratis') + '</em></button>').join('')
     + '<p class="muted">Du kan ha en tränare åt gången och byta när du vill. Levnadskostnad på den här nivån: ' + kr(weeklyCost(S) - coachCost(S)) + ' i veckan. Sponsorer ger ' + kr(S.sponsor) + ' i veckan.' + (modSum(S,'money') ? ' Åtaganden ' + (modSum(S,'money') > 0 ? 'ger ' : 'kostar ') + kr(Math.abs(modSum(S,'money'))) + ' i veckan.' : '') + '</p>';
   const perks = S.perks.length ? '<p class="muted">Förmågor: ' + S.perks.map(p => PERK[p].name).join(', ') + '.</p>' : '';
@@ -2853,9 +3158,9 @@ function viewHub(){
   if (tab === 'spelare') body = playerCard() + '<section class="panel"><h2>Egenskaper</h2>' + rowsHtml + '<p class="muted">Strecket visar fältets snitt. Gult är skärpa från träningen, rött är ringrost, mörkt är utrustningen. Allt det räknas bara i tävlingen.</p>' + perks + '</section>' + bagPanel() + seasonStats()
     + '<section class="panel"><h2>Tränare</h2>' + coach + '</section>';
   else if (tab === 'karriar') body = careerView() + albumPanel();
-  else if (tab === 'touren') body = seasonPath() + '<section class="panel"><h2>Tabell</h2>' + table + '</section><section class="panel"><h2>Rivaler</h2>' + rivalsBody() + '</section>';
+  else if (tab === 'touren') body = seasonPath() + racePanel() + '<section class="panel"><h2>Tabell</h2>' + table + '</section>' + toursPanel() + '<section class="panel"><h2>Rivaler</h2>' + rivalsBody() + '</section>';
   else body = seasonPath() + ongoing()
-    + '<div class="tipline">' + avatarSVG('Bosse', 'bosse') + '<p><b>Bosse, klubbens pro</b><br>' + esc(tip(S)) + '</p></div>'
+    + '<div class="tipline">' + avatarSVG(MENTOR[mentorOf(S)].name, MENTOR[mentorOf(S)].ava) + '<p><b>' + MENTOR[mentorOf(S)].name + ', ' + mentorTitle(S) + '</b><br>' + esc(tip(S)) + '</p></div>'
     + reportPanel() + eventPanel() + tour + plan
     + '<button class="go" type="button" data-a="run"' + (pending ? ' disabled' : '') + '>' + (pending ? 'Svara på händelsen först' : enter ? 'Träna och spela' : 'Kör veckan') + '</button>';
   return head + body + tabbar;
@@ -2893,11 +3198,23 @@ function scorecard(T){
   ui.cardShown = T.holes.filter(x => x != null).length; return html;
 }
 function viewReveal(){
-  const v = ui.reveal, word = OUT[v.d][0].toUpperCase() + OUT[v.d].slice(1), lab = v.f && v.f.dist != null ? meters(v.f.dist) + ' m' : '';
-  return header(COURSE[S.T.c].name + ' · Runda ' + v.round + ' av ' + S.T.rounds)
-    + '<section class="panel moment"><h2>Hål ' + v.hole + '</h2><div class="scene">' + sceneSVG(v.tpl, {me:meTour(), rain:wetNow(), pick:v.opt, flip:v.flip, end:Object.assign(sceneEnd(v.tpl, v.opt, v.ok, v.flip, v.f && v.f.lk), {lab})}) + '<div class="stamp ' + stampCorner(v.tpl, v.opt, v.ok, lab, v.flip, v.f && v.f.lk) + (v.d < 0 ? ' good' : v.d > 0 ? ' bad' : '') + '">' + word + '</div></div>'
-    + '<div class="react"><p><b>' + esc(v.label) + '.</b> ' + esc(v.txt) + luckTxt(v.f) + '</p><div class="rfig">' + golferSVG(meTour(), {pose:reactPose(v.d), bag:false, crop:'half'}) + '</div></div>' + afterShot(v.f, v) + shotBox(v.f, v.tpl) + '</section>'
-    + '<button class="go" type="button" data-a="cont">Fortsätt</button>';
+  const v = ui.reveal, T = S.T, pend = !!(T.drop && v.f === T.feed[T.drop.fi]), dr = v.f && v.f.drop, word = pend ? 'Plikt' : OUT[v.d][0].toUpperCase() + OUT[v.d].slice(1);
+  // Efter släppet ligger bollen vid släppet, med avståndet till flaggan på mätlinjen. dropPts i art.js räknar fram punkterna ur skissen.
+  const dp = dr ? dropPts(v.tpl, v.opt, v.flip) : null, lab = dp ? dr.m + ' m' : v.f && v.f.dist != null ? meters(v.f.dist) + ' m' : '';
+  const end = Object.assign(sceneEnd(v.tpl, v.opt, v.ok, v.flip, v.f && v.f.lk), {lab}, dp ? {pt:dp[dr.i], kind:'land'} : {});
+  return header(COURSE[T.c].name + ' · Runda ' + v.round + ' av ' + T.rounds)
+    + '<section class="panel moment"><h2>Hål ' + v.hole + '</h2><div class="scene">' + sceneSVG(v.tpl, {me:meTour(), rain:wetNow(), pick:v.opt, flip:v.flip, end, drops:pend ? [0, 1] : dr ? [dr.i] : null}) + '<div class="stamp ' + stampCorner(v.tpl, v.opt, v.ok, lab, v.flip, v.f && v.f.lk) + (pend || v.d > 0 ? ' bad' : v.d < 0 ? ' good' : '') + (word.length > 8 ? ' long' : '') + '">' + word + '</div></div>'
+    + '<div class="react"><p><b>' + esc(v.label) + '.</b> ' + esc(v.txt) + luckTxt(v.f) + '</p><div class="rfig">' + golferSVG(meTour(), {pose:reactPose(pend ? 1 : v.d), bag:false, crop:'half'}) + '</div></div>' + afterShot(v.f, v) + (pend ? dropPanel() : '') + shotBox(v.f, v.tpl) + '</section>'
+    + (pend ? '' : '<button class="go" type="button" data-a="cont">Fortsätt</button>');
+}
+// Var släpper du? Två val som i ett nyckelläge: chans, stapel, vad som prövas och vad det kan bli på hålet.
+function dropPanel(){
+  const m = momentView(S); if (!m.drop) return '';
+  return '<div class="droppick"><h3>Var släpper du?</h3>' + m.opts.map((o,i) => { const pct = Math.round(o.p*20)*5;
+    return '<button class="opt" type="button" data-a="drop" data-i="' + i + '"><span class="ol"><span class="lt l' + i + '">' + 'AB'[i] + '</span><b>' + o.label + '</b><em>ca ' + pct + ' %</em></span>'
+      + '<span class="obar" aria-hidden="true"><i style="width:' + pct + '%"></i></span>'
+      + '<span class="orow"><span class="ost"><span class="chipk">' + o.m + ' m</span>' + o.stats.map(k => '<span class="chipk">' + STAT[k].n + '</span>').join('') + '</span>'
+      + '<span class="oout"><span class="good">✓ ' + outs(o.good).replace(/ eller /g, '/') + '</span><span class="bad">✗ ' + outs(o.bad).replace(/ eller /g, '/') + '</span></span></span></button>'; }).join('') + '</div>';
 }
 function viewTour(){
   if (ui.reveal) return viewReveal();
@@ -2916,6 +3233,7 @@ function viewTour(){
     const rtxt = !rn ? '' : rn.d < 0 ? ' ' + esc(rn.name) + ' ligger ' + (-rn.d) + ' slag före dig.' : rn.d === 0 ? ' Du och ' + esc(rn.name) + ' ligger på samma resultat.' : ' ' + esc(rn.name) + ' jagar dig, ' + rn.d + ' slag bakom.';
     body = '<section class="strip three"><div class="cell"><div class="lab">Efter hål</div><div class="val">' + T.thru + '</div></div><div class="cell"><div class="lab">Totalt</div><div class="val">' + rel(st.me) + '</div></div><div class="cell hot"><div class="lab">Plats</div><div class="val">' + st.pos + '<small>av ' + st.n + '</small>' + arrow + '</div></div></section>'
       + (st.cutRoom != null ? '<p class="cutnow' + (st.cutRoom < 0 ? ' low' : '') + '"><b>Kutten just nu: ' + rel(st.cutLine) + '.</b> ' + (st.cutRoom > 0 ? 'Du har ' + st.cutRoom + ' slag till godo.' : st.cutRoom === 0 ? 'Du ligger precis på gränsen.' : 'Du är ' + (-st.cutRoom) + ' slag utanför.') + '</p>' : '')
+      + liveLine()
       + (feed ? '<div class="feed">' + feed + '</div>' : '')
       + '<section class="panel moment" data-tpl="' + m.tpl + '"><h2>Hål ' + m.hole + (m.pressure ? '<span class="tag">Hög press</span>' : '') + '</h2><div class="scene">' + sceneSVG(m.tpl, {me:meTour(), rain:wetNow(), tv:tvFor(m.tpl), flip:m.flip, marks:(m.marks || []).map(k => ({to:k.to, lab:mark(k.m)}))}) + '</div><h3>' + m.title + '</h3><p>' + m.text + '</p>' + (rtxt ? '<p><b>' + rtxt.trim() + '</b></p>' : '')
       // Alternativen visar i stället för att förklara (Simon 2026-11-14): namn, chans, en stapel, och en rad med vad som avgör och vad som står på spel.
@@ -2935,6 +3253,7 @@ function viewTour(){
       // Resultatet visar i stället för att förklara (Simon 2026-11-14): placeringen först, tre siffror, träningen kort. Rundan slag för slag och hela listan fälls ut.
       body = '<div class="arthead solo">' + (r.pos === 1 ? winnerSVG(meArt(), !!T.final) : bannerSVG(T.c)) + '</div><section class="panel"><h2>Slutresultat</h2><div class="bigres"><div class="mark' + (r.pos === 1 ? ' win' : '') + '">' + r.pos + '</div><div><h3>' + (r.pos === 1 ? 'Seger!' : r.missed ? 'Missad kutt' : ord(r.pos) + ' plats') + '</h3><div class="reschips"><span class="chipk">' + rel(r.tot) + '</span><span class="chipk">' + r.pts + ' poäng</span>' + (r.prize ? '<span class="chipk">' + kr(r.prize) + '</span>' : '') + '</div></div>' + (r.pos === 1 ? '' : '<div class="resfig">' + golferSVG(meTour(), {pose:resPose(r.pos), bag:false}) + '</div>') + '</div>'
         + (r.missed ? '<p><b>Kutten gick vid ' + rel(r.cut.line) + '.</b> Du slutade på ' + rel(r.tot) + ' efter två rundor. Inga poäng och inga prispengar.</p>' : '')
+        + (r.table ? '<div class="reschips tb"><span class="lab">Tabellen</span><span class="chipk">' + ord(r.table.to) + (r.table.from && r.table.from !== r.table.to ? '<span class="mv ' + (r.table.to < r.table.from ? 'up' : 'down') + '">' + (r.table.to < r.table.from ? '▲' : '▼') + Math.abs(r.table.from - r.table.to) + '</span>' : '') + '</span>' + raceChip(r.table) + '</div>' : '')
         + milesNew(r.miles) + recsNew(r) + r.notes.map(x => '<p class="muted">' + esc(x) + '</p>').join('') + choiceFx(r) + trainFx(r, T)
         + (r.rivals && r.rivals.length ? '<div class="reschips rv"><span class="lab">Rivalerna</span>' + r.rivals.map(x => '<span class="chipk ' + (x.beat ? 'beat' : 'lost') + '">' + (x.beat ? '✓ ' : '✗ ') + esc(x.name) + ' · ' + ord(x.pos) + '</span>').join('') + '</div>' : '')
         + (r.quote ? '<div class="quote">' + bustSVG(faceOf(r.quote.name)) + '<p>”' + esc(r.quote.text) + '”<span>' + esc(r.quote.name) + '</span></p></div>' : '')
@@ -2965,12 +3284,14 @@ function viewSeasonEnd(){
     + (best ? '<p class="muted">Bästa veckan: ' + ord(best.pos) + ' på ' + esc(COURSE[best.c].name) + ', vecka ' + best.week + '.</p>' : '<p class="muted">Du spelade ingen tävling den här säsongen.</p>') + '</section>';
   return header('Säsong ' + S.season + ' är slut') + '<div class="hero-art">' + ladderSVG(TIER.map(t => t.name), S.tier, to, f.champion) + '</div><div class="endme"><div><p class="hero">' + head + '</p><p>' + txt + '</p></div><div class="resfig">' + golferSVG(meArt(), {pose:f.champion || f.promoted ? 'cheer' : f.relegated ? 'slump' : 'stand', bag:false}) + '</div></div>' + milesNew(f.miles) + look
     + '<section class="panel"><h2>Säsongens utveckling</h2>' + statRows(true) + '</section>'
-    + '<section class="panel"><h2>Sluttabell</h2>' + lbTable(standings(S), 'pts', v => v + ' p') + '</section>'
+    + '<section class="panel"><h2>Sluttabell</h2>' + lbTable(standings(S), 'pts', v => v + ' p', false, tableLines()) + '</section>'
     + (f.offers.length ? '<section class="panel"><h2>Välj en förmåga inför nästa säsong</h2>' + perks + '</section>' : '<button class="go" type="button" data-a="perk" data-k="">Nästa säsong</button>');
 }
 
 function render(){
   if (ui.reveal && !(S && S.phase === 'tour' && S.T)) ui.reveal = null;
+  // En sparfil som väntar på släppet efter vattnet (sidan laddades om): visa slaget igen med valen.
+  if (!ui.reveal && S && S.phase === 'tour' && S.T && S.T.drop){ const D = S.T.drop, f = S.T.feed[D.fi]; if (f) ui.reveal = {tpl:D.tpl, opt:D.opt, flip:!!f.flip, ok:false, d:f.d, txt:f.txt, label:f.label, hole:f.hole, round:S.T.r+1, f}; else S.T.drop = null; }
   app.className = 'app' + (S && !ui.week && S.phase !== 'tour' && S.phase !== 'seasonEnd' ? ' has-tabs' : '');
   app.innerHTML = !S ? viewStart() : ui.week ? viewWeek() : S.phase === 'tour' ? viewTour() : S.phase === 'seasonEnd' ? viewSeasonEnd() : viewHub();
 }
@@ -3031,6 +3352,13 @@ document.addEventListener('click', ev => {
     // Klassen heter 'swing' och inte 'go': 'go' är den stora knappens klass, och då trycktes hålskissen ihop till en mörk rand medan bollen flög (rättat 2026-11-15).
     if (reduceMotion || !root) fin(); else { if (root.scrollIntoView) root.scrollIntoView({block:'nearest'}); root.classList.add('swing'); swing(legs[0]); animateShot(root, tplId, i, f.ok, fin, swing, flip, f.lk); }
     return;
+  }
+  else if (a === 'drop'){
+    if (!S.T || !S.T.drop || !ui.reveal) { render(); return; }
+    const fi = S.T.drop.fi; choose(S, +b.dataset.i); const f = S.T.feed[fi];
+    Object.assign(ui.reveal, {f, d:f.d, txt:f.txt}); save();
+    SFX.land(); (f.drop.dd < 0 ? SFX.good : f.drop.dd > 0 ? SFX.bad : SFX.par)(); buzz(f.drop.dd > 0 ? [30,50,30] : 18);
+    render(); const g = app.querySelector('.go'); if (g) g.focus({preventScroll:true}); return;
   }
   else if (a === 'cont'){ ui.reveal = null; if (S.T && S.T.stage === 'done' && S.T.result.pos <= 3){ confetti(); SFX.win(); } else if (S.T && S.T.stage === 'done' && ((S.T.result.miles || []).length || (S.T.result.recs || []).length)) SFX.good(); top(); }
   else if (a === 'contweek'){ ui.week = null; top(); }
